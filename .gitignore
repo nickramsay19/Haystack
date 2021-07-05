@@ -2,6 +2,9 @@
 build/*
 main
 
+# Common files
+.vscode
+
 # MacOS files - https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 # General
 .DS_Store
