@@ -1,0 +1,6 @@
+push 99
+push 5
+push 0
+maybe print
+print
+print

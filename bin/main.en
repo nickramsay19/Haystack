@@ -1,0 +1,10 @@
+push 5
+push 10
+add
+copy
+print
+print
+read
+read
+add
+print

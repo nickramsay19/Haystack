@@ -1,6 +1,6 @@
 # tool macros
 CC := gcc
-FLAGS := -Wall -Wextra -Werror
+FLAGS := 
 
 # path macros
 PATHS = $(SRC_PATH) $(OBJ_PATH) $(BIN_PATH) $(TESTS_PATH) $(INCLUDE_PATH)
@@ -13,7 +13,7 @@ INCLUDE_PATH := src/include
 # file macros
 SOURCES := $(wildcard $(SRC_PATH)/*.c)
 OBJECTS := $(patsubst $(SRC_PATH)/%.c, $(OBJ_PATH)/%.o, $(SOURCES))
-EXECUTABLE := $(BIN_PATH)/main
+EXECUTABLE := $(BIN_PATH)/esonick
 
 default: $(PATHS) $(EXECUTABLE)
 
