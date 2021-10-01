@@ -1,6 +1,6 @@
 # Stack only esoteric programming language
 
-## Usage
+## Usage (MacOS)
 ```
 make
 cd bin
