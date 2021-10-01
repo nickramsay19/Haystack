@@ -101,14 +101,14 @@ int main(int argc, char **argv) {
         case BREAK:break;
         // cond start here
         case COND_READ:
-            ExecuteConditionally(READ, s, &condflag);
+            ExecuteConditionally(READ, &stack, &condflag);
             break;
         case COND_PRINT:
             stack = StackPop(stack, pop1);
             stack = StackPop(stack, pop2);
             if (*pop1 && condflag == 0) {
                 printf("%d\n", *pop1); // TODO: replace print with int->char print
-                condflag = ;
+                condflag = 0;
             } else {
                 condflag = 1;
             }

@@ -30,6 +30,7 @@ int Execute(Command c, Stack *s) {
     int *pop1 = malloc(sizeof(int));
     int *pop2 = malloc(sizeof(int));
     int *read = malloc(sizeof(int));
+    int *res = malloc(sizeof(int));
 
     switch (c) {
     case READ:
@@ -93,6 +94,7 @@ int Execute(Command c, Stack *s) {
     free(pop1);
     free(pop2);
     free(read);
+    free(res);
 
     return 1;
 }
