@@ -1,4 +1,4 @@
-push 100
-maybe push 10
-then print
-done
+push 1              // push 1 to the top of the stack
+maybe push 10       // push 10 to the stack IF item at the top of the stack (1) is true, so yes
+then print          // if yes, print the item
+done                // end the conditional sequence

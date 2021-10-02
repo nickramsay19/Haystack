@@ -21,9 +21,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    // initialise the stack
-    Stack stack = StackNew(0);
-
     // open the file
     char *filename = argv[1];
     FILE *fp = fopen(filename, "r");
@@ -38,28 +35,14 @@ int main(int argc, char **argv) {
     // initalise runtime state
     Runtime runtime = RuntimeNew();
 
-    int *res = malloc(sizeof(int));
+    // keep track of the current line for debugging purposes
     int line = 1;
-    int *read = malloc(sizeof(int));
-    int *pop1 = malloc(sizeof(int));
-    int *pop2 = malloc(sizeof(int));
-    int *pop3 = malloc(sizeof(int));
-    int condflag = 0;
-
-    debug(0.0);
-
-    //fscanf(fp, "%s", buf);
-    //fgets(buf, MAX_STRING, fp);
-   
 
     while (fgets(buf, MAX_STRING, fp) != NULL) {
 
         ParseStatement(buf, runtime);
-        debug(2.0);
 
         Command c = ParseStatement(buf, runtime);
-
-        debug(723412);
 
         // DelegateExecution(c, runtime)
 
