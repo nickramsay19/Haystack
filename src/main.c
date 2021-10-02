@@ -118,11 +118,6 @@ int main(int argc, char **argv) {
     }
     
     // free memory
-    free(res);
-    free(read);
-    free(pop1);
-    free(pop2);
-    free(pop3);
     fclose(fp);
 
     return 0;
