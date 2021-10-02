@@ -3,9 +3,10 @@
 
 #include "Parser.h"
 #include "Stack.h"
+#include "Runtime.h"
 
-int ExecuteConditionally(Command c, Stack *s, int *condflag);
+int ExecuteConditionally(Command c, Runtime runtime);
 
-int Execute(Command c, Stack *s);
+int Execute(Command c, Runtime runtime);
 
 #endif

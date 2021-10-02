@@ -1,10 +1,13 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "Runtime.h"
+
 enum CommandEnum {
     COND_ERROR = -3,
     TYPE_ERROR = -2,
     SYNTAX_ERROR = -1,
+    NONE,
     READ, // we only have integers for now
     PRINT,
     PUSH,
@@ -15,7 +18,7 @@ enum CommandEnum {
     MULT,
     DIV,
     MOD,
-    BREAK,
+    BREAK, 
     COND_READ,
     COND_PRINT,
     COND_PUSH,
@@ -27,10 +30,27 @@ enum CommandEnum {
     COND_DIV,
     COND_MOD,
     COND_BREAK,
-
+    THEN_READ,
+    THEN_PRINT,
+    THEN_PUSH,
+    THEN_COPY,
+    THEN_POP,
+    THEN_ADD,
+    THEN_SUB,
+    THEN_MULT,
+    THEN_DIV,
+    THEN_MOD,
+    THEN_BREAK
 };
 typedef enum CommandEnum Command;
 
-Command ParseStatement(char* stmt, int *res);
+enum ConditionTypeEnum {
+    COND_TYPE_START,
+    COND_TYPE_CONTINUE,
+    COND_TYPE_END
+};
+typedef enum ConditionTypeEnum ConditionType;
+
+Command ParseStatement(char* stmt, Runtime runtime);
 
 #endif

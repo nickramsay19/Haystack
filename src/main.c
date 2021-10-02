@@ -4,6 +4,7 @@
 #include "include/Stack.h"
 #include "include/Parser.h"
 #include "include/Executor.h"
+#include "include/Runtime.h"
 
 #define MAX_STRING 1000
 
@@ -33,7 +34,10 @@ int main(int argc, char **argv) {
 
     // loop through the file
     char buf[MAX_STRING];
-    //size_t *buf_len;
+
+    // initalise runtime state
+    Runtime runtime = RuntimeNew();
+
     int *res = malloc(sizeof(int));
     int line = 1;
     int *read = malloc(sizeof(int));
@@ -46,18 +50,18 @@ int main(int argc, char **argv) {
 
     //fscanf(fp, "%s", buf);
     //fgets(buf, MAX_STRING, fp);
-
-    debug(0.1);    
+   
 
     while (fgets(buf, MAX_STRING, fp) != NULL) {
 
-        debug(1.0);
-        ParseStatement(buf, res);
+        ParseStatement(buf, runtime);
         debug(2.0);
 
-        Command c = ParseStatement(buf, res);
+        Command c = ParseStatement(buf, runtime);
 
         debug(723412);
+
+        // DelegateExecution(c, runtime)
 
         switch (c)
         {
@@ -70,29 +74,12 @@ int main(int argc, char **argv) {
         case COND_ERROR:
             printf("Error: Conditional error (line: %d). At \"%s\".\nDid you put a conditional statement within a conditional statement?\n", line, buf);
         case READ:
-            scanf("%d", read);
-            stack = StackPush(stack, *read);
-            break;
         case PRINT:
-            stack = StackPop(stack, pop1);
-            printf("%d\n", *pop1); // TODO: replace print with int->char print
-            break;
         case PUSH:
-            // number to push should be in res
-            stack = StackPush(stack, *res);
-            break;
         case COPY:
-            stack = StackPop(stack, pop1);
-            stack = StackPush(stack, *pop1); // undo
-            stack = StackPush(stack, *pop1); // copy
-            break;
         case POP:
-            stack = StackPop(stack, pop1);
-            break;
         case ADD:
-            stack = StackPop(stack, pop1);
-            stack = StackPop(stack, pop2);
-            stack = StackPush(stack, *pop1 + *pop2);
+            Execute(c, runtime);
             break;
         case SUB: break;
         case MULT:break;
@@ -101,52 +88,43 @@ int main(int argc, char **argv) {
         case BREAK:break;
         // cond start here
         case COND_READ:
-            ExecuteConditionally(READ, &stack, &condflag);
+            ExecuteConditionally(READ, runtime);
             break;
         case COND_PRINT:
-            stack = StackPop(stack, pop1);
-            stack = StackPop(stack, pop2);
-            if (*pop1 && condflag == 0) {
-                printf("%d\n", *pop1); // TODO: replace print with int->char print
-                condflag = 0;
-            } else {
-                condflag = 1;
-            }
+            ExecuteConditionally(PRINT, runtime);
             break;
         case COND_PUSH:
-            stack = StackPop(stack, pop1);
-            if (pop1) {
-                stack = StackPush(stack, *res);
-            }
+            ExecuteConditionally(PUSH, runtime);
             break;
         case COND_COPY:
-            stack = StackPop(stack, pop1);
-            if (pop1) {
-                stack = StackPop(stack, pop1);
-                stack = StackPush(stack, *pop1); // undo
-                stack = StackPush(stack, *pop1); // copy
-            }
+            ExecuteConditionally(COPY, runtime);
             break;
         case COND_POP:
-            stack = StackPop(stack, pop1);
-            if (pop1) {
-                stack = StackPop(stack, NULL); // todo: check if null ok
-            }
+            ExecuteConditionally(POP, runtime);
             break;
         case COND_ADD:
-            stack = StackPop(stack, pop1);
-            if (pop1) {
-                stack = StackPop(stack, pop1);
-                stack = StackPop(stack, pop2);
-                stack = StackPush(stack, *pop1 + *pop2);
-            }
+            ExecuteConditionally(ADD, runtime);
             break;
         case COND_SUB: break;
         case COND_MULT:break;
         case COND_DIV:break;
         case COND_MOD:break;
         case COND_BREAK:break;
-        
+        case THEN_READ:
+        case THEN_PRINT:
+        case THEN_PUSH:
+        case THEN_COPY:
+        case THEN_POP:
+        case THEN_ADD:
+        case THEN_SUB:
+        case THEN_MULT:
+        case THEN_DIV:
+        case THEN_MOD:
+        case THEN_BREAK:
+            Execute(c, runtime);
+
+        case NONE:
+            break;
         default:
             printf("Error: Unknown error (line: %d).\nHave you entered a nonexistent command?\n", line);
             return 0;

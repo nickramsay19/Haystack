@@ -1,0 +1,9 @@
+push 1
+push 0
+maybe push -99
+then print
+or push 99
+then print
+done
+push 10
+print

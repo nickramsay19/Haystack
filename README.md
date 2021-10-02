@@ -17,6 +17,8 @@ cd bin
         - jumps to last loop header "loop"
 - conditionals
     - maybe print
+    - or pop
+    - done
 - comments
 - undo conditional pop regardless in cond_print
 - done - end conditional
