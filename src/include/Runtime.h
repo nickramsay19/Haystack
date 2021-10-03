@@ -5,12 +5,16 @@
 #include "Stack.h"
 
 #define MAX_PAYLOAD 2
+#define MAX_LOOP_DEPTH 10
 
 struct RuntimeRep {
+    int *payload; // payload carries parsed tokens to the executor
+
     bool cond; // conditional sequence flag
-    bool cond_carry;
-    int loop; // loop depth
-    int *payload;
+    bool cond_carry; // carry to a then
+    
+    int loop_depth; // loop depth
+    int *loop_reference;
 
     Stack stack;
 };

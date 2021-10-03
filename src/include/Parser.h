@@ -18,7 +18,6 @@ enum CommandEnum {
     MULT,
     DIV,
     MOD,
-    BREAK, 
     COND_READ,
     COND_PRINT,
     COND_PUSH,
@@ -29,7 +28,6 @@ enum CommandEnum {
     COND_MULT,
     COND_DIV,
     COND_MOD,
-    COND_BREAK,
     THEN_READ,
     THEN_PRINT,
     THEN_PUSH,
@@ -40,7 +38,12 @@ enum CommandEnum {
     THEN_MULT,
     THEN_DIV,
     THEN_MOD,
-    THEN_BREAK
+    LOOP,
+    //COND_LOOP
+    //THEN_LOOP
+    BREAK, 
+    COND_BREAK,
+    THEN_BREAK,
 };
 typedef enum CommandEnum Command;
 
