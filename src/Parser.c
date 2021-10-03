@@ -44,7 +44,6 @@ Command Parse(char **tokens, Runtime runtime) {
     } else if(strcmp(tokens[0], "copy") == 0) {
         return COPY;
     } else if(strcmp(tokens[0], "pop") == 0) {
-        //return SYNTAX_ERROR; // if I remove pop, replace with this
         return POP;
     } else if(strcmp(tokens[0], "add") == 0) {
         return ADD;

@@ -13,73 +13,75 @@ int Execute(Command c, Runtime runtime);
 
 int DelegateExecution(Command c, Runtime runtime) {
     switch (c)
-        {
-        case TYPE_ERROR:
-            printf("Error: Type error (line: %d).\n", line);
-            return 0;
-        case SYNTAX_ERROR:
-            printf("Error: Syntax error (line: %d). At \"%s\".\n", line, buf);
-            return 0;
-        case COND_ERROR:
-            printf("Error: Conditional error (line: %d). At \"%s\".\nDid you put a conditional statement within a conditional statement?\n", line, buf);
-        case READ:
-        case PRINT:
-        case PUSH:
-        case COPY:
-        case POP:
-        case ADD:
-            Execute(c, runtime);
-            break;
-        case SUB: break;
-        case MULT:break;
-        case DIV:break;
-        case MOD:break;
-        case BREAK:break;
-        // cond start here
-        case COND_READ:
-            ExecuteConditionally(READ, runtime);
-            break;
-        case COND_PRINT:
-            ExecuteConditionally(PRINT, runtime);
-            break;
-        case COND_PUSH:
-            ExecuteConditionally(PUSH, runtime);
-            break;
-        case COND_COPY:
-            ExecuteConditionally(COPY, runtime);
-            break;
-        case COND_POP:
-            ExecuteConditionally(POP, runtime);
-            break;
-        case COND_ADD:
-            ExecuteConditionally(ADD, runtime);
-            break;
-        case COND_SUB: break;
-        case COND_MULT:break;
-        case COND_DIV:break;
-        case COND_MOD:break;
-        case COND_BREAK:break;
-        case THEN_READ:
-        case THEN_PRINT:
-        case THEN_PUSH:
-        case THEN_COPY:
-        case THEN_POP:
-        case THEN_ADD:
-        case THEN_SUB:
-        case THEN_MULT:
-        case THEN_DIV:
-        case THEN_MOD:
-        case LOOP:
-            ExecuteLoop()
-        case THEN_BREAK:
-            Execute(c, runtime);
-            break;
-        case NONE:
-            break;
-        default:
-            printf("Error: Unknown error (line: %d).\nHave you entered a nonexistent command?\n", line);
-            return 0;
-        }
+    {
+    case TYPE_ERROR:
+        printf("Error: Type error (line: %d).\n", runtime->line_num);
+        return 0;
+    case SYNTAX_ERROR:
+        printf("Error: Syntax error (line: %d).\n", runtime->line_num);
+        return 0;
+    case COND_ERROR:
+        printf("Error: Conditional error (line: %d).\nDid you put a conditional statement within a conditional statement?\n", runtime->line_num);
+    case READ:
+    case PRINT:
+    case PUSH:
+    case COPY:
+    case POP:
+    case ADD:
+        Execute(c, runtime);
+        break;
+    case SUB: break;
+    case MULT:break;
+    case DIV:break;
+    case MOD:break;
+    // cond start here
+    case COND_READ:
+        ExecuteConditionally(READ, runtime);
+        break;
+    case COND_PRINT:
+        ExecuteConditionally(PRINT, runtime);
+        break;
+    case COND_PUSH:
+        ExecuteConditionally(PUSH, runtime);
+        break;
+    case COND_COPY:
+        ExecuteConditionally(COPY, runtime);
+        break;
+    case COND_POP:
+        ExecuteConditionally(POP, runtime);
+        break;
+    case COND_ADD:
+        ExecuteConditionally(ADD, runtime);
+        break;
+    case COND_SUB: break;
+    case COND_MULT:break;
+    case COND_DIV:break;
+    case COND_MOD:break;
+    case COND_BREAK:break;
+    case THEN_READ:
+    case THEN_PRINT:
+    case THEN_PUSH:
+    case THEN_COPY:
+    case THEN_POP:
+    case THEN_ADD:
+    case THEN_SUB:
+    case THEN_MULT:
+    case THEN_DIV:
+    case THEN_MOD:
+    case LOOP:
+        ExecuteLoop(c, runtime);
+    case THEN_BREAK:
+        Execute(c, runtime);
+        break;
+    case NONE:
+        break;
+    default:
+        printf("Error: Unknown error (line: %d).\nHave you entered a nonexistent command?\n", runtime->line_num);
+        return 0;
+    }
+
+    // increment line number
+    runtime->line_num++;
 }
 
 int ExecuteConditionally(Command c, Runtime runtime) {
@@ -105,9 +107,10 @@ int ExecuteConditionally(Command c, Runtime runtime) {
 }
 
 int ExecuteLoop(Command c, Runtime runtime) {
+
     // edit runtime
     runtime->loop_depth++;
-    runtime->loop_reference[runtime->loop_depth] = 
+    runtime->loop_reference[runtime->loop_depth] = runtime->line_num;
 }
 
 int Execute(Command c, Runtime runtime) {
@@ -221,7 +224,10 @@ int Execute(Command c, Runtime runtime) {
             Execute(MOD, runtime);
         }
         break;
-    case BREAK:break;
+    case JUMP:
+        //runtime->loop_depth--;
+        // move the line number to correct line
+        runtime->line_num = runtime->loop_reference[runtime->loop_depth] + 1;
     }
 
     free(pop1);

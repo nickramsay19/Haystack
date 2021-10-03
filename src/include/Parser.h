@@ -41,7 +41,7 @@ enum CommandEnum {
     LOOP,
     //COND_LOOP
     //THEN_LOOP
-    BREAK, 
+    JUMP, 
     COND_BREAK,
     THEN_BREAK,
 };

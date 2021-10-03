@@ -1,0 +1,6 @@
+read ; condition a
+read ; condition b
+add ; a + b = 0, 1 or 2
+maybe push 1 ; [a+b, 1]
+sub ; if a+b > 0, [a+b - 1] = [0, 1], else [0]
+; now the item at the top of the stack is the boolean of a AND b
