@@ -1,0 +1,12 @@
+push 0          ; [0]            
+loop            ;
+push 1          ; [0, 1]                    ; [1, 1]
+add             ; [1]                       ; [2]
+copy            ; [1, 1]                    ; [2, 2]
+print           ; [1]                       ; [2]
+copy            ; [1, 1]                    ; [2, 2]
+push 1000       ; [1, 1, 1000]              ; [2, 2, 1000]
+sub             ; [1, 1000-1] = [1, 999]    ; [2, 1000-2] = [2, 998]
+maybe jump      ; [1]                       ; [2]
+push -1         ; mark the end of execution with a -1
+print

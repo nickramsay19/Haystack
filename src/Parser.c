@@ -61,6 +61,8 @@ Command Parse(char **tokens, Runtime runtime) {
         return POP;
     } else if(strcmp(tokens[0], "add") == 0) {
         return ADD;
+    } else if(strcmp(tokens[0], "sub") == 0) {
+        return SUB;
     } else if(strcmp(tokens[0], "maybe") == 0) {
         return ParseConditional(tokens, runtime, COND_TYPE_START);
     } else if(strcmp(tokens[0], "or") == 0) {

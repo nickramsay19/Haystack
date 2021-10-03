@@ -1,0 +1,7 @@
+push 0          ; [0]
+loop            ;
+push 1          ; [0, 1]
+add             ; [1]
+copy            ; [1, 1]
+print           ; [1]
+jump

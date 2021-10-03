@@ -54,8 +54,11 @@ int main(int argc, char **argv) {
 
     char *fg = fgets(buf, MAX_STRING, fp);
 
-    while (fg != NULL && !runtime->error) {
+    int limit = 10200;
+    int i = 0;
 
+    while (fg != NULL && !runtime->error && i < limit) {
+        i++;
         // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 
@@ -70,6 +73,8 @@ int main(int argc, char **argv) {
         //fseek(fp, SEEK_SET, runtime->line_num);
         setLine(fp, runtime->line_num);
         //printf("jumped to line %d\n", runtime->line_num);
+        //printStack(runtime->stack);
+        //printf("loop depth: %d\n", runtime->loop_depth);
 
         //printf("retriveding next line:\n");
         fg = fgets(buf, MAX_STRING, fp);

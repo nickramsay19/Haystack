@@ -1,0 +1,11 @@
+push 1              ; [1]
+loop
+push 1              ; [1, 1]
+add                 ; [2]
+copy                ; [2, 2]
+push 9              ; [2, 2, 9]
+sub                 ; [2, 9-2] = [2, 7]
+copy                ; [2, 7, 7]
+print               ; [2, 7]                ; prints 7
+maybe jump
+print

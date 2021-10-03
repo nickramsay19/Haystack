@@ -32,12 +32,12 @@ int DelegateExecution(Command c, Runtime runtime) {
     case COPY:
     case POP:
     case ADD:
+    case SUB: 
+    case MULT:
+    case DIV:
+    case MOD:
         Execute(c, runtime);
         break;
-    case SUB: break;
-    case MULT:break;
-    case DIV:break;
-    case MOD:break;
     // cond start here
     case COND_READ:
         ExecuteConditionally(READ, runtime);
@@ -78,10 +78,12 @@ int DelegateExecution(Command c, Runtime runtime) {
         Execute(c, runtime);
         break;
     case JUMP:
-        if (runtime->then) {
+        if (runtime->then || runtime->cond) {
             ExecuteConditionally(c, runtime);
+        } else {
+            ExecuteJump(c, runtime);
         }
-        ExecuteJump(c, runtime);
+        
         break;
     case NONE:
         break;
@@ -114,6 +116,9 @@ int ExecuteConditionally(Command c, Runtime runtime) {
 
         // end the conditional sequence
         runtime->cond = 0;
+
+    } else if (c == JUMP) {
+        runtime->loop_depth--;
     }
 
     free(pop);
@@ -132,7 +137,7 @@ int ExecuteLoop(Command c, Runtime runtime) {
 int ExecuteJump(Command c, Runtime runtime) {
 
     // set runtime line number
-    runtime->line_num = runtime->loop_reference[runtime->loop_depth] + 1;
+    runtime->line_num = runtime->loop_reference[runtime->loop_depth];// + 1;
 
     return 1;
 }
