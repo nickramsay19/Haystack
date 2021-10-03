@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #include "include/Stack.h"
 #include "include/Parser.h"
@@ -16,6 +17,7 @@ Command ParsePush(char **tokens, Runtime runtime);
 Command ParseConditional(char **tokens, Runtime runtime, ConditionType type);
 Command ParseThen(char **tokens, Runtime runtime);
 char **Split(char *words, int *count);
+char *StripComments(char *words, int *count);
 
 void debugp(float x) {
     //printf("%f\n", x);
@@ -23,9 +25,21 @@ void debugp(float x) {
 
 Command ParseStatement(char* stmt, Runtime runtime) {
 
+    // set the executing flag
+    // assume we execute the line
+    runtime->executing = true;
+
+    // assume that the command isn't a THEN_ command
+    runtime->then = false;
+
+    // strip comments
+    int count = 0;
+    char *stmtcpy = StripComments(stmt, &count);
+    
+
     // convert statement to array of word tokens
     int words = 0;
-    char **stmtwords = Split(stmt, &words);
+    char **stmtwords = Split(stmtcpy, &words);
 
     debugp(1);
 
@@ -57,8 +71,10 @@ Command Parse(char **tokens, Runtime runtime) {
         return ParseThen(tokens, runtime);
     } else if(strcmp(tokens[0], "loop") == 0) {
         return LOOP;
-    } else if(strcmp(tokens[0], "break") == 0) {
-        return BREAK;
+    } else if(strcmp(tokens[0], "jump") == 0) {
+        return JUMP;
+    } else if (tokens[0][0] == ';') {
+        return NONE; // comment
     } else {
         return SYNTAX_ERROR;
     }
@@ -89,7 +105,9 @@ Command ParseConditional(char **tokens, Runtime runtime, ConditionType type) {
             break;
         case COND_TYPE_CONTINUE:
             if (runtime->cond == 0) {
-                return NONE;
+                // set the execution to false
+                // but ensure that other flags carry
+                runtime->executing = false;
             }
             runtime->cond_carry = 0;
             break;
@@ -100,8 +118,8 @@ Command ParseConditional(char **tokens, Runtime runtime, ConditionType type) {
     }
 
     // we assume that first token is "maybe" or "or"
-    // move on to second token
 
+    // move on to second token
     if(strcmp(tokens[1], "read") == 0) {
         return COND_READ;
     } else if(strcmp(tokens[1], "print") == 0) {
@@ -116,8 +134,12 @@ Command ParseConditional(char **tokens, Runtime runtime, ConditionType type) {
         return COND_POP;
     } else if(strcmp(tokens[1], "add") == 0) {
         return COND_ADD;
+    } else if(strcmp(tokens[1], "jump") == 0) {
+        return JUMP;
     } else if(strcmp(tokens[1], "maybe") == 0) {
         return COND_ERROR; // cant have a conditional in a conditional
+    } else if (tokens[1][0] == ';') {
+        return NONE; // comment
     } else {
         return SYNTAX_ERROR;
     }
@@ -135,8 +157,11 @@ Command ParseThen(char **tokens, Runtime runtime) {
         return THEN_COPY;
     } else if(strcmp(tokens[1], "pop") == 0) {
         return THEN_POP;
-    } else if(strcmp(tokens[1], "add") == 0) {
+    } else if(strcmp(tokens[1], "add") == 0) { // todo: add mult, div, etc
         return THEN_ADD;
+    } else if(strcmp(tokens[1], "jump") == 0) {
+        runtime->then = true;
+        return JUMP;
     } else if(strcmp(tokens[1], "maybe") == 0) {
         return COND_ERROR;
     } else if(strcmp(tokens[1], "or") == 0) {
@@ -158,7 +183,7 @@ char **Split(char *words, int *count) {
     int w = 0;
     int wi = 0;
     for (int i = 0; i < strlen(words); i++) {
-        if (words[i] == ' ' || words[i] == '\n') {
+        if (words[i] == ' ' || words[i] == '\n' || words[i] == '\t') {
             w++;
             wi = 0;
             arr[w] = calloc(MAX_WORD, sizeof(char));
@@ -170,4 +195,26 @@ char **Split(char *words, int *count) {
     *count = w;
 
     return arr;
+}
+
+char *StripComments(char *words, int *count) {
+
+    int words_len = strlen(words);
+    char *wordscpy = calloc(words_len, sizeof(char));
+
+    int i = 0;
+    for (i = 0; i < words_len; i++) {
+        if (words[i] == ';') {
+            break;
+        }
+
+        wordscpy[i] = words[i];
+    }
+
+    *count = i;
+
+    // shrink wordscpy
+    wordscpy = realloc(wordscpy, i * sizeof(char));
+
+    return wordscpy;
 }

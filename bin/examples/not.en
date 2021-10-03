@@ -1,5 +1,5 @@
 ; this program inverts the the boolean value at the top of the stack
-read ; condition to be inverted
+read            ; condition to be inverted
 
 ; convert user input to boolean 1 or zero
 push 1
@@ -8,7 +8,7 @@ maybe pop
 or push 0
 
 ; begin inverting boolean
-push 1 ; [x, 1]
-sub ; [x - 1] = [-1/0]
-maybe push 1 ; if (x-1 == -1 == true) then replace it with 1
+push 1          ; [x, 1]
+sub             ; [x - 1] = [-1/0]
+maybe push 1    ; if (x-1 == -1 == true) then replace it with 1
 ; now the item at the top of the stack is inverted

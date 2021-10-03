@@ -18,6 +18,12 @@ struct RuntimeRep {
 
     int line_num;
 
+    bool executing;
+
+    bool then;
+
+    bool error;
+
     Stack stack;
 };
 

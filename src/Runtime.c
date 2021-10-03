@@ -19,6 +19,8 @@ Runtime RuntimeNew() {
 
     r->line_num = 1; // start execution on line 1
 
+    r->error = false;
+
     return r;
 }
 

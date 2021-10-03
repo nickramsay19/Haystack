@@ -1,6 +1,7 @@
 ; this program produces a single boolean of the value (a && b), where a, b are user given
 push 0          ; keep a zero in case the AND evaluates to zero and
 read            ; condition a
+copy
 read            ; condition b
 add             ; a + b = 0, 1 or 2
 maybe pop       ; clear the push 0 from above to keep the stack clean

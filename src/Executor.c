@@ -9,19 +9,23 @@
 // method headers
 int ExecuteConditionally(Command c, Runtime runtime);
 int ExecuteLoop(Command c, Runtime runtime);
+int ExecuteJump(Command c, Runtime runtime);
 int Execute(Command c, Runtime runtime);
 
 int DelegateExecution(Command c, Runtime runtime) {
     switch (c)
     {
     case TYPE_ERROR:
-        printf("Error: Type error (line: %d).\n", runtime->line_num);
+        runtime->error = true;
+        printf("Error: Type error (line: %d) in execution.\n", runtime->line_num);
         return 0;
     case SYNTAX_ERROR:
-        printf("Error: Syntax error (line: %d).\n", runtime->line_num);
+        runtime->error = true;
+        printf("Error: Syntax error (line: %d) in execution.\n", runtime->line_num);
         return 0;
     case COND_ERROR:
-        printf("Error: Conditional error (line: %d).\nDid you put a conditional statement within a conditional statement?\n", runtime->line_num);
+        runtime->error = true;
+        printf("Error: Conditional error (line: %d) in execution.\nDid you put a conditional statement within a conditional statement?\n", runtime->line_num);
     case READ:
     case PRINT:
     case PUSH:
@@ -73,15 +77,24 @@ int DelegateExecution(Command c, Runtime runtime) {
     case THEN_BREAK:
         Execute(c, runtime);
         break;
+    case JUMP:
+        if (runtime->then) {
+            ExecuteConditionally(c, runtime);
+        }
+        ExecuteJump(c, runtime);
+        break;
     case NONE:
         break;
     default:
-        printf("Error: Unknown error (line: %d).\nHave you entered a nonexistent command?\n", runtime->line_num);
+        runtime->error = true;
+        printf("Error: Unknown error (line: %d) in execution.\nHave you entered a nonexistent command?\n", runtime->line_num);
         return 0;
     }
 
     // increment line number
     runtime->line_num++;
+
+    return 1;
 }
 
 int ExecuteConditionally(Command c, Runtime runtime) {
@@ -104,13 +117,24 @@ int ExecuteConditionally(Command c, Runtime runtime) {
     }
 
     free(pop);
+
+    return 1;
 }
 
 int ExecuteLoop(Command c, Runtime runtime) {
-
     // edit runtime
     runtime->loop_depth++;
     runtime->loop_reference[runtime->loop_depth] = runtime->line_num;
+
+    return 1;
+}
+
+int ExecuteJump(Command c, Runtime runtime) {
+
+    // set runtime line number
+    runtime->line_num = runtime->loop_reference[runtime->loop_depth] + 1;
+
+    return 1;
 }
 
 int Execute(Command c, Runtime runtime) {
@@ -225,9 +249,10 @@ int Execute(Command c, Runtime runtime) {
         }
         break;
     case JUMP:
-        //runtime->loop_depth--;
-        // move the line number to correct line
-        runtime->line_num = runtime->loop_reference[runtime->loop_depth] + 1;
+        ExecuteJump(c, runtime);
+        break;
+    default:
+        break;
     }
 
     free(pop1);

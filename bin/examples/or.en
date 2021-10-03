@@ -1,0 +1,14 @@
+; this program produces a single boolean of the value (a || b), where a, b are user given
+push 0          ; we need to add this push 0 incase the a + b evaluates to 0
+                ; then there will be a 0 in its place when the if condition fails
+read            ; condition a
+read            ; condition b
+add             ; now item at the top of the stack = a + b = 0, 1 or 2
+
+; now convert the item to a boolean. I.e. if it is two, replace it with a one
+; we know that the item is either 0, 1 or 2, so we don't need to perform the entire conversion
+maybe pop       ; remove the push 0 from above to clean the stack
+then push 1     ; simply replace the 1 or 2 with a 1
+                ; otherwise, leave the zero
+
+; now the item at the top of the stack equals (a || b)

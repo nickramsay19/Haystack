@@ -1,9 +1,7 @@
 push 1
 push 0
-maybe push -99
-then print
-or push 99
-then print
+maybe push 10       ; if (0) { push 10
+then print          ;          print }
+or push 20          ; else if (1) { push 20
+then print          ;               print }
 done
-push 10
-print

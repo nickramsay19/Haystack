@@ -42,6 +42,8 @@ enum CommandEnum {
     //COND_LOOP
     //THEN_LOOP
     JUMP, 
+    THEN_JUMP,
+    BREAK,
     COND_BREAK,
     THEN_BREAK,
 };
