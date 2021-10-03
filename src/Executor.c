@@ -6,6 +6,9 @@
 #include "include/Runtime.h"
 #include "include/Executor.h"
 
+int DelegateExecution(Command c, Runtime runtime) {
+    
+}
 
 int ExecuteConditionally(Command c, Runtime runtime) {
     int *pop = malloc(sizeof(int));

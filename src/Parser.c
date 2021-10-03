@@ -56,6 +56,10 @@ Command Parse(char **tokens, Runtime runtime) {
         return ParseConditional(tokens, runtime, COND_TYPE_END);
     } else if(strcmp(tokens[0], "then") == 0) {
         return ParseThen(tokens, runtime);
+    } else if(strcmp(tokens[0], "loop") == 0) {
+        return LOOP;
+    } else if(strcmp(tokens[0], "break") == 0) {
+        return BREAK;
     } else {
         return SYNTAX_ERROR;
     }
