@@ -35,20 +35,13 @@ int main(int argc, char **argv) {
     // initalise runtime state
     Runtime runtime = RuntimeNew();
 
-    // keep track of the current line for debugging purposes
-    int line = 1;
-
     while (fgets(buf, MAX_STRING, fp) != NULL) {
 
-        ParseStatement(buf, runtime);
-
+        // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 
         // delegate execution amongst executor
         DelegateExecution(c, runtime);
-
-        // increment line number
-        line++;
     }
     
     // free memory, close files

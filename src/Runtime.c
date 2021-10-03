@@ -13,9 +13,11 @@ Runtime RuntimeNew() {
 
     r->cond = 0;
     r->cond_carry = 0;
-    r->loop_depth = 0;
 
+    r->loop_depth = 0;
     r->loop_reference = calloc(MAX_LOOP_DEPTH, sizeof(int));
+
+    r->line_num = 1; // start execution on line 1
 
     return r;
 }

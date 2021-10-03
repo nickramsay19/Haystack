@@ -16,6 +16,8 @@ struct RuntimeRep {
     int loop_depth; // loop depth
     int *loop_reference;
 
+    int line_num;
+
     Stack stack;
 };
 
