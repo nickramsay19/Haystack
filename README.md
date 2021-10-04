@@ -76,18 +76,20 @@ cd bin
     2. The integer at the top of the stack is interpreted as true (i.e. it is not zero).
     - NOTE: If both 1 & 2 hold, then, like in the **maybe** command, the integer at the top of the stack is popped and subsequnetly interpreted. However, this is not true if, in particular, 1 does not hold. That is, if a conditional sequence directly above an **or** is triggered, the **or** statement will NOT pop a value from the stack, since regardless, it will NOT execute its ajoining command.
 - **loop** - Marks a loop position in the code. The next **jump** command will jump to this line.
-- **jump** - Moves execution to the previous loop header.
-    - NOTE: If a **jump** (see the **jump** command below) command is to be executed conditionally, that is, it is preceded by a **maybe** or an **or** command (e.g `maybe jump`) AND it fails to execute (i.e. the condition does not pass), then Haystack will recognise this as a failed jump. Any further jumps will move the program to a prior loop.
-        - For example, this program will infinitely print exclamation marks and dollar signs since the second **jump** statement will jump to the FIRST loop, since a **jump** command precedes it. This is true regardless of whether or not a preceding **jump** triggered.
+- **jump** - Moves execution to the previous loop header without an associated **jump** command.
+    - NOTE: If a **jump** command is to be executed conditionally, that is, it is preceded by a **maybe** or an **or** command (e.g `maybe jump`) AND it fails to execute (i.e. the condition does not pass), then Haystack will recognise this as a failed jump. Any further jumps will move the program to a prior loop header from the last.
+        - For example, this program will infinitely print exclamation marks AND dollar signs (as opposed to just dollar signs) since the second **jump** statement will jump to the FIRST loop header, since a **jump** command precedes it. This is true regardless of whether or not a preceding conditional **jump** triggered.
             ```
-                loop
+                loop        ; LOOP A
                 print 50    ; Exclamation mark(!) in ASCII.
-                loop
+                loop        ; LOOP B
                 print 36    ; Dollar sign($) in ASCII.
                 push 0
                 maybe jump  ; This jump will NEVER trigger, since 0 precedes it.
-                jump        ; This jump will jump to the FIRST loop, despite being the first jump triggered after the beginning of the SECOND loop.
+                            ; But it is still recognised as a jump to LOOP B even if it doesn't trigger.
+                jump        ; This jump will jump to LOOP A, despite being the first jump triggered after the beginning of LOOP B.
             ```
+            This means, that each loop can only have one **jump** statement associated with it.
 
 ## Backlog
 - Char support.
