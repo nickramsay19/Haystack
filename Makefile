@@ -13,7 +13,7 @@ INCLUDE_PATH := src/include
 # file macros
 SOURCES := $(wildcard $(SRC_PATH)/*.c)
 OBJECTS := $(patsubst $(SRC_PATH)/%.c, $(OBJ_PATH)/%.o, $(SOURCES))
-EXECUTABLE := $(BIN_PATH)/esonick
+EXECUTABLE := $(BIN_PATH)/haystack
 
 default: $(PATHS) $(EXECUTABLE)
 

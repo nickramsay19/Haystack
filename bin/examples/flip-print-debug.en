@@ -1,0 +1,32 @@
+; read the first input a
+read            ; [a]                                           
+; PROCEDURE: toBool
+push 1
+read
+maybe pop
+or push 0
+
+; now we have a = 0 or a = 1
+copy            ; [a, a]
+read            ; [a, a, b]
+copy            ; [a, a, b, b]
+add             ; [a, a, 2b]
+push 1          ; [a, a, 2b, 1]
+add             ; [a, a, 2b + 1]
+add             ; [a, 2b+1+a]   
+                ; NOTE: 2b+1+a will equal 2b+1 or 2b+2, 
+                ; that is, it is either odd or even based on a
+copy            ; [a, 2b+1+a, 2b+1+a]  
+;PROCEDURE: isEven
+push 2          ; [a, 2b+1+a, 2b+1+a, 2] 
+mod             ; [a, 2b+1+a, c] 
+                ; where c = 1 if 2b+1+a was even i.e. when a is 1
+                ;       c = 0 if 2b+1+a was odd i.e. when a is 0
+maybe push 2    ; [a, 2b+1+a, 2]
+then div        ; [a, b+1]
+then push 1     ; [a, b+1, 1]
+then sub        ; [a, b]
+then print      ; [a]
+then pop        ; []
+
+

@@ -36,7 +36,6 @@ Command ParseStatement(char* stmt, Runtime runtime) {
     int count = 0;
     char *stmtcpy = StripComments(stmt, &count);
     
-
     // convert statement to array of word tokens
     int words = 0;
     char **stmtwords = Split(stmtcpy, &words);
@@ -63,6 +62,12 @@ Command Parse(char **tokens, Runtime runtime) {
         return ADD;
     } else if(strcmp(tokens[0], "sub") == 0) {
         return SUB;
+    } else if(strcmp(tokens[0], "mult") == 0) {
+        return MULT;
+    } else if(strcmp(tokens[0], "div") == 0) {
+        return DIV;
+    } else if(strcmp(tokens[0], "mod") == 0) {
+        return MOD;
     } else if(strcmp(tokens[0], "maybe") == 0) {
         return ParseConditional(tokens, runtime, COND_TYPE_START);
     } else if(strcmp(tokens[0], "or") == 0) {
@@ -136,6 +141,14 @@ Command ParseConditional(char **tokens, Runtime runtime, ConditionType type) {
         return COND_POP;
     } else if(strcmp(tokens[1], "add") == 0) {
         return COND_ADD;
+    } else if(strcmp(tokens[1], "sub") == 0) {
+        return COND_SUB;
+    } else if(strcmp(tokens[1], "mult") == 0) {
+        return COND_MULT;
+    } else if(strcmp(tokens[1], "div") == 0) {
+        return COND_DIV;
+    } else if(strcmp(tokens[1], "mod") == 0) {
+        return COND_MOD;
     } else if(strcmp(tokens[1], "jump") == 0) {
         return JUMP;
     } else if(strcmp(tokens[1], "maybe") == 0) {
@@ -161,6 +174,14 @@ Command ParseThen(char **tokens, Runtime runtime) {
         return THEN_POP;
     } else if(strcmp(tokens[1], "add") == 0) { // todo: add mult, div, etc
         return THEN_ADD;
+    } else if(strcmp(tokens[1], "sub") == 0) {
+        return THEN_SUB;
+    } else if(strcmp(tokens[1], "mult") == 0) {
+        return THEN_MULT;
+    } else if(strcmp(tokens[1], "div") == 0) {
+        return THEN_DIV;
+    } else if(strcmp(tokens[1], "mod") == 0) {
+        return THEN_MOD;
     } else if(strcmp(tokens[1], "jump") == 0) {
         runtime->then = true;
         return JUMP;

@@ -57,10 +57,18 @@ int DelegateExecution(Command c, Runtime runtime) {
     case COND_ADD:
         ExecuteConditionally(ADD, runtime);
         break;
-    case COND_SUB: break;
-    case COND_MULT:break;
-    case COND_DIV:break;
-    case COND_MOD:break;
+    case COND_SUB:
+        ExecuteConditionally(SUB, runtime);
+        break;
+    case COND_MULT:
+        ExecuteConditionally(MULT, runtime);
+        break;
+    case COND_DIV:
+        ExecuteConditionally(DIV, runtime);
+        break;
+    case COND_MOD:
+        ExecuteConditionally(MOD, runtime);
+        break;
     case COND_BREAK:break;
     case THEN_READ:
     case THEN_PRINT:
@@ -178,7 +186,7 @@ int Execute(Command c, Runtime runtime) {
     case SUB: 
         runtime->stack = StackPop(runtime->stack, pop1);
         runtime->stack = StackPop(runtime->stack, pop2);
-        runtime->stack = StackPush(runtime->stack, *pop1 - *pop2);
+        runtime->stack = StackPush(runtime->stack, *pop2 - *pop1);
         break;
     case MULT:
         runtime->stack = StackPop(runtime->stack, pop1);
@@ -188,8 +196,8 @@ int Execute(Command c, Runtime runtime) {
     case DIV:
         runtime->stack = StackPop(runtime->stack, pop1);
         runtime->stack = StackPop(runtime->stack, pop2);
-        if (*pop2 != 0) {
-            runtime->stack = StackPush(runtime->stack, *pop1 / *pop2);
+        if (*pop1 != 0) {
+            runtime->stack = StackPush(runtime->stack, *pop2 / *pop1);
         } else {
             return 0;
         }
@@ -197,8 +205,8 @@ int Execute(Command c, Runtime runtime) {
     case MOD:
         runtime->stack = StackPop(runtime->stack, pop1);
         runtime->stack = StackPop(runtime->stack, pop2);
-        if (*pop2 != 0) {
-            runtime->stack = StackPush(runtime->stack, *pop1 % *pop2);
+        if (*pop1 != 0) {
+            runtime->stack = StackPush(runtime->stack, *pop2 % *pop1);
         } else {
             return 0;
         }

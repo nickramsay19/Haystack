@@ -1,6 +1,4 @@
-; this program converts an integer to a boolean 1 or 0
-push 1
+push 0
 read
-maybe pop
-or push 0
-; now the item at the top of the stack is a boolean 1 or 0
+maybe push 1
+print
