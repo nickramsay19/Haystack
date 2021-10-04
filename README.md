@@ -48,7 +48,8 @@ cd bin
 - Comments - Any text written after a semicolon (";") and on the same line will not be parsed by Haystack.
 - **read** - Reads a single character from stdin, stores it's ASCII value as an integer to the top of the stack.
 - **print** - Pops from the stack, prints the value's ASCII interpretation as a character.
-- **push X** - Pushes the integer X to the top of the stack.
+- **push X** - Pushes the integer X to the top of the stack. 
+    - NOTE: X is a wildcard here, it must be replaced with a literal integer e.g. 4, -1, 557, etc
 - **pop** - Pops and deletes the integer at the top of the stack.
 - **copy** - Copies the item at the top of stack, leaving two copies.
 - **add** - Pop's the top two integers on the stack, then pushes the addition of both.
