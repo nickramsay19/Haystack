@@ -4,8 +4,13 @@
 ## Overview
 Haystack is an esoteric programming language that disallows the storage of memory outside of a stack data structure. That is, the language doesn't support variables and all data is stored on a stack. Conditional statments, loop conditions and all operations are performed on items at the top of the stack.
 
-### Hello,  world! - In Haystack
-In the following Hello world example, notice how items are pushed in reverse order. This is of course due the fact that printing prints the item on top i.e. the last item added.
+### Other notable features
+- **Datatypes** - Haystack has direct support for integers exclusively. However, characters can be interpreted through their ASCII representation and are converted to/from integers during IO procedures.
+- **Unconditional Else** - Haystack has `if` and `else if` equivalents from other languages, precisely the `maybe` and `or` commands respectively. However, Haystack doesn't have an `else` condition. To perform a catch-all `else` condition, an `or` (equivalent to `else if`) condition must be manually forced to trigger.
+- **Functions & classes** - Haystack does not support definitions of functions and classes. Essential operations such as addition, subtraction, etc are provided via inbuilt commands.
+
+### Example: Hello,  world! In Haystack
+In the following Hello world example, notice how items are pushed in reverse order. This is of course due the fact that printing will print the item on top i.e. the last item added.
 ```
 push 50     ; "!" in ASCII.
 push 100    ; "d"
@@ -75,7 +80,7 @@ cd bin
 - **or** - If preceded by a **maybe** or an **or** statement, the command directly next to it (on the same line) will be executed if and only if:
     1. None of the preceding conditionals triggered.
     2. The integer at the top of the stack is interpreted as true (i.e. it is not zero).
-    - NOTE: If both 1 & 2 hold, then, like in the **maybe** command, the integer at the top of the stack is popped and subsequnetly interpreted. However, this is not true if, in particular, 1 does not hold. That is, if a conditional sequence directly above an **or** is triggered, the **or** statement will NOT pop a value from the stack, since regardless, it will NOT execute its ajoining command.
+    - NOTE: If both 1 & 2 hold, then, like in the **maybe** command, the integer at the top of the stack is popped and subsequnetly interpreted. However, this is not true if, in particular, 1 does not hold. That is, if a conditional sequence directly above an **or** is triggered, the **or** statement will NOT pop a value from the stack, since it will NOT execute its ajoining command no matter its value.
 - **loop** - Marks a loop position in the code. The next **jump** command will jump to this line.
 - **jump** - Moves execution to the previous loop header without an associated **jump** command.
     - NOTE: If a **jump** command is to be executed conditionally, that is, it is preceded by a **maybe** or an **or** command (e.g `maybe jump`) AND it fails to execute (i.e. the condition does not pass), then Haystack will recognise this as a failed jump. Any further jumps will move the program to a prior loop header from the last.
