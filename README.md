@@ -8,11 +8,12 @@ Haystack is an esoteric programming language that disallows the storage of memor
 - **Datatypes** - Haystack has direct support for integers exclusively. However, characters can be interpreted through their ASCII representation and are converted to/from integers during IO procedures.
 - **Unconditional Else** - Haystack has `if` and `else if` equivalents from other languages, precisely the `maybe` and `or` commands respectively. However, Haystack doesn't have an `else` condition. To perform a catch-all `else` condition, an `or` (equivalent to `else if`) condition must be manually forced to trigger.
 - **Functions & classes** - Haystack does not support definitions of functions and classes. Essential operations such as addition, subtraction, etc are provided via inbuilt commands.
+- **Logical operations** - Common logical operators in other languages such as `&&`, `||` and `!` (negation) are not provided in Haystack. In Haystack, these operations must be performed manually and mathematically.
 
 ### Example: Hello,  world! In Haystack
 In the following Hello world example, notice how items are pushed in reverse order. This is of course due the fact that printing will print the item on top i.e. the last item added.
 ```
-push 50     ; "!" in ASCII.
+push 33     ; "!" in ASCII.
 push 100    ; "d"
 push 108    ; "l"
 push 114    ; "r"
@@ -65,7 +66,7 @@ cd bin
 - **maybe** - Pops the item at the top of the stack, if it is interpreted as boolean true (i.e. it isn't equal to zero) then the command directly after it (on the same line) will be executed.
     - For example, this program will print an exclamation mark(!), since 1 will be interpreted as true.
         ```
-            push 50         ; Exclamation mark(!) in ASCII.
+            push 33         ; Exclamation mark(!) in ASCII.
             push 1
             maybe print     ; Equivalent to if (1) { print }
         ```
@@ -73,7 +74,7 @@ cd bin
     - For example, this program will print an exclamation mark(!) since the **maybe** statement will trigger, immediately followed by the `then print`.
         ```
             push 1
-            maybe push 50   ; Exclamation mark(!) in ASCII.
+            maybe push 33   ; Exclamation mark(!) in ASCII.
             then print
         ```
     
@@ -87,7 +88,7 @@ cd bin
         - For example, this program will infinitely print exclamation marks AND dollar signs (as opposed to just dollar signs) since the second **jump** statement will jump to the FIRST loop header, since a **jump** command precedes it. This is true regardless of whether or not a preceding conditional **jump** triggered.
             ```
                 loop        ; LOOP A
-                print 50    ; Exclamation mark(!) in ASCII.
+                print 33    ; Exclamation mark(!) in ASCII.
                 loop        ; LOOP B
                 print 36    ; Dollar sign($) in ASCII.
                 push 0

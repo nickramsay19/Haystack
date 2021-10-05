@@ -154,17 +154,17 @@ int Execute(Command c, Runtime runtime) {
 
     int *pop1 = malloc(sizeof(int));
     int *pop2 = malloc(sizeof(int));
-    int *read = malloc(sizeof(int));
+    char *read = malloc(sizeof(char));
     int *res = malloc(sizeof(int));
 
     switch (c) {
     case READ:
-        scanf("%d", read);
-        runtime->stack = StackPush(runtime->stack, *read);
+        scanf("%c", read);
+        runtime->stack = StackPush(runtime->stack, (int) *read);
         break;
     case PRINT:
         runtime->stack = StackPop(runtime->stack, pop1);
-        printf("%d\n", *pop1); // TODO: replace print with int->char print
+        printf("%c", (char) *pop1);
         break;
     case PUSH:
         // number to push should be in res

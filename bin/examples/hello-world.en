@@ -1,4 +1,5 @@
-push 50     ; "!" in ASCII.
+push 10     ; Newline in ASCII.
+push 33     ; "!" in ASCII.
 push 100    ; "d"
 push 108    ; "l"
 push 114    ; "r"
@@ -11,6 +12,7 @@ push 108    ; "l"
 push 108    ; "l"
 push 101    ; "e"
 push 72     ; "H"
+print
 print
 print
 print
