@@ -32,7 +32,6 @@ void setLine(FILE *fp, int line) {
 }
 
 int main(int argc, char **argv) {
-    
     if (argc < 2) {
         printf("Error: No input file specified.\n");
         return 1;
@@ -59,6 +58,7 @@ int main(int argc, char **argv) {
 
     while (fg != NULL && !runtime->error && i < limit) {
         i++;
+        //printf("%d\n", i);
         // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 

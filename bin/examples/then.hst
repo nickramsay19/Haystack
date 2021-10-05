@@ -1,0 +1,10 @@
+push 51
+print
+push 1
+push 0
+maybe push 49
+then print
+or push 50
+then print
+push 10
+print

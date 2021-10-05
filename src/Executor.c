@@ -13,6 +13,15 @@ int ExecuteJump(Command c, Runtime runtime);
 int Execute(Command c, Runtime runtime);
 
 int DelegateExecution(Command c, Runtime runtime) {
+
+    // first check the then flag
+    if (runtime->then && !runtime->cond_carry) {
+        return 0;
+    } else if (!runtime->then) {
+        // if the statement isn't a then, ensure no conds carry forward
+        runtime->cond_carry = false;
+    }
+
     switch (c)
     {
     case TYPE_ERROR:
@@ -69,29 +78,14 @@ int DelegateExecution(Command c, Runtime runtime) {
     case COND_MOD:
         ExecuteConditionally(MOD, runtime);
         break;
-    case COND_BREAK:break;
-    case THEN_READ:
-    case THEN_PRINT:
-    case THEN_PUSH:
-    case THEN_COPY:
-    case THEN_POP:
-    case THEN_ADD:
-    case THEN_SUB:
-    case THEN_MULT:
-    case THEN_DIV:
-    case THEN_MOD:
     case LOOP:
         ExecuteLoop(c, runtime);
-    case THEN_BREAK:
-        Execute(c, runtime);
-        break;
     case JUMP:
         if (runtime->then || runtime->cond) {
             ExecuteConditionally(c, runtime);
         } else {
             ExecuteJump(c, runtime);
         }
-        
         break;
     case NONE:
         break;
@@ -209,56 +203,6 @@ int Execute(Command c, Runtime runtime) {
             runtime->stack = StackPush(runtime->stack, *pop2 % *pop1);
         } else {
             return 0;
-        }
-        break;
-    case THEN_READ:
-        if (runtime->cond_carry) {
-            Execute(READ, runtime);
-        }
-        break;
-    case THEN_PRINT:
-        if (runtime->cond_carry) {
-            Execute(PRINT, runtime);
-        }
-        break;
-    case THEN_PUSH:
-        if (runtime->cond_carry) {
-            Execute(PUSH, runtime);
-        }
-        break;
-    case THEN_COPY:
-        if (runtime->cond_carry) {
-            Execute(COPY, runtime);
-        }
-        break;
-    case THEN_POP:
-        if (runtime->cond_carry) {
-            Execute(POP, runtime);
-        }
-        break;
-    case THEN_ADD:
-        if (runtime->cond_carry) {
-            Execute(ADD, runtime);
-        }
-        break;
-    case THEN_SUB: 
-        if (runtime->cond_carry) {
-            Execute(SUB, runtime);
-        }
-        break;
-    case THEN_MULT:
-        if (runtime->cond_carry) {
-            Execute(MULT, runtime);
-        }
-        break;
-    case THEN_DIV:
-        if (runtime->cond_carry) {
-            Execute(DIV, runtime);
-        }
-        break;
-    case THEN_MOD:
-        if (runtime->cond_carry) {
-            Execute(MOD, runtime);
         }
         break;
     case JUMP:

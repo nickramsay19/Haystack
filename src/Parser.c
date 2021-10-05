@@ -29,8 +29,11 @@ Command ParseStatement(char* stmt, Runtime runtime) {
     // assume we execute the line
     runtime->executing = true;
 
-    // assume that the command isn't a THEN_ command
+    // assume that the command isn't a then command
     runtime->then = false;
+
+    // assume the statement isn't conditional
+    runtime->cond = false;
 
     // strip comments
     int count = 0;
@@ -69,19 +72,24 @@ Command Parse(char **tokens, Runtime runtime) {
     } else if(strcmp(tokens[0], "mod") == 0) {
         return MOD;
     } else if(strcmp(tokens[0], "maybe") == 0) {
-        return ParseConditional(tokens, runtime, COND_TYPE_START);
+        // set the cond flag to enter a conditional sequence
+        runtime->cond = 1;
+        runtime->cond_carry = 0; // could this be true already, what would that imply?
+        return Parse((&tokens[1]), runtime);
     } else if(strcmp(tokens[0], "or") == 0) {
-        return ParseConditional(tokens, runtime, COND_TYPE_CONTINUE);
-    } else if(strcmp(tokens[0], "done") == 0) {
-        return ParseConditional(tokens, runtime, COND_TYPE_END);
+        if (runtime->cond == 0) {
+            // set the execution to false
+            runtime->executing = false;
+        }
+        runtime->cond_carry = 0;
+        return Parse((&tokens[1]), runtime);
     } else if(strcmp(tokens[0], "then") == 0) {
-        return ParseThen(tokens, runtime);
+        runtime->then = true;
+        return Parse((&tokens[1]), runtime);
     } else if(strcmp(tokens[0], "loop") == 0) {
         return LOOP;
     } else if(strcmp(tokens[0], "jump") == 0) {
         return JUMP;
-    } else if (tokens[0][0] == ';') {
-        return NONE; // comment
     } else {
         return SYNTAX_ERROR;
     }
@@ -98,104 +106,6 @@ Command ParsePush(char **tokens, Runtime runtime) {
     runtime->payload[0] = j;
 
     return PUSH;
-}
-
-Command ParseConditional(char **tokens, Runtime runtime, ConditionType type) {
-
-    // set the conditional flag
-    // and convert command to none command if needed
-    switch (type) {
-        case COND_TYPE_START:
-            // set the cond flag to enter a conditional sequence
-            runtime->cond = 1;
-            runtime->cond_carry = 0;
-            break;
-        case COND_TYPE_CONTINUE:
-            if (runtime->cond == 0) {
-                // set the execution to false
-                // but ensure that other flags carry
-                runtime->executing = false;
-            }
-            runtime->cond_carry = 0;
-            break;
-        case COND_TYPE_END:
-            runtime->cond = 0;
-            runtime->cond_carry = 0;
-            return NONE;
-    }
-
-    // we assume that first token is "maybe" or "or"
-
-    // move on to second token
-    if(strcmp(tokens[1], "read") == 0) {
-        return COND_READ;
-    } else if(strcmp(tokens[1], "print") == 0) {
-        return COND_PRINT;
-    } else if(strcmp(tokens[1], "push") == 0) {
-        //printf("read push\n");
-        ParsePush(&tokens[1], runtime);
-        return COND_PUSH;
-    } else if(strcmp(tokens[1], "copy") == 0) {
-        return COND_COPY;
-    } else if(strcmp(tokens[1], "pop") == 0) {
-        return COND_POP;
-    } else if(strcmp(tokens[1], "add") == 0) {
-        return COND_ADD;
-    } else if(strcmp(tokens[1], "sub") == 0) {
-        return COND_SUB;
-    } else if(strcmp(tokens[1], "mult") == 0) {
-        return COND_MULT;
-    } else if(strcmp(tokens[1], "div") == 0) {
-        return COND_DIV;
-    } else if(strcmp(tokens[1], "mod") == 0) {
-        return COND_MOD;
-    } else if(strcmp(tokens[1], "jump") == 0) {
-        return JUMP;
-    } else if(strcmp(tokens[1], "maybe") == 0) {
-        return COND_ERROR; // cant have a conditional in a conditional
-    } else if (tokens[1][0] == ';') {
-        return NONE; // comment
-    } else {
-        return SYNTAX_ERROR;
-    }
-}
-
-Command ParseThen(char **tokens, Runtime runtime) {
-    if(strcmp(tokens[1], "read") == 0) {
-        return THEN_READ;
-    } else if(strcmp(tokens[1], "print") == 0) {
-        return THEN_PRINT;
-    } else if(strcmp(tokens[1], "push") == 0) {
-        ParsePush(tokens, runtime); // ignore return value
-        return THEN_PUSH;
-    } else if(strcmp(tokens[1], "copy") == 0) {
-        return THEN_COPY;
-    } else if(strcmp(tokens[1], "pop") == 0) {
-        return THEN_POP;
-    } else if(strcmp(tokens[1], "add") == 0) { // todo: add mult, div, etc
-        return THEN_ADD;
-    } else if(strcmp(tokens[1], "sub") == 0) {
-        return THEN_SUB;
-    } else if(strcmp(tokens[1], "mult") == 0) {
-        return THEN_MULT;
-    } else if(strcmp(tokens[1], "div") == 0) {
-        return THEN_DIV;
-    } else if(strcmp(tokens[1], "mod") == 0) {
-        return THEN_MOD;
-    } else if(strcmp(tokens[1], "jump") == 0) {
-        runtime->then = true;
-        return JUMP;
-    } else if(strcmp(tokens[1], "maybe") == 0) {
-        return COND_ERROR;
-    } else if(strcmp(tokens[1], "or") == 0) {
-        return COND_ERROR;
-    } else if(strcmp(tokens[1], "done") == 0) {
-        return COND_ERROR;
-    } else if(strcmp(tokens[1], "then") == 0) {
-        return COND_ERROR;
-    } else {
-        return SYNTAX_ERROR;
-    }
 }
 
 char **Split(char *words, int *count) {

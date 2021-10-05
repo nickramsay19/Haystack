@@ -13,6 +13,7 @@ Haystack is an esoteric programming language that disallows the storage of memor
 ### Example: Hello,  world! In Haystack
 In the following Hello world example, notice how items are pushed in reverse order. This is of course due the fact that printing will print the item on top i.e. the last item added.
 ```
+push 10     ; Newline in ASCII.
 push 33     ; "!" in ASCII.
 push 100    ; "d"
 push 108    ; "l"
@@ -39,9 +40,8 @@ print
 print
 print
 print
+print
 ```
-
-
 
 ## Usage & Compilation (MacOS)
 ```
@@ -103,3 +103,5 @@ cd bin
     - Store and print ASCII values to/from the stack.
 - Improve comment parsing.
 - Division by zero error.
+- Allow the pushing of chars.
+    - e.g. `push 'c'` 

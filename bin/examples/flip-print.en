@@ -1,11 +1,15 @@
 push 0          ;                                                   ; PROCEDURE: toBool (1)
 read            ; [a]  
+push 49         ;                                                   ; PROCEDURE: toInt (1)
+sub             ;                                                   ; PROCEDURE: toInt (2)
 maybe push 1    ;                                                   ; PROCEDURE: toBool (2)
 push 1          ; [x, 1]                                            ; PROCEDURE: negate (1)                 
 sub             ; [x - 1] = [-1/0]                                  ; PROCEDURE: negate (2)  
 maybe push 1    ; if (x-1 == -1 == true) then replace it with 1     ; PROCEDURE: negate (3)  
 copy            ; [a, a]        
-read            ; [a, a, b]
+read            ; [a, a, b]   
+push 49         ;                                                   ; PROCEDURE: toInt (1)
+sub             ;                                                   ; PROCEDURE: toInt (2)                    
 copy            ; [a, a, b, b]
 add             ; [a, a, 2b]
 push 1          ; [a, a, 2b, 1]
@@ -18,5 +22,7 @@ maybe push 2    ; [a, 2b+1+a, 2]
 then div        ; [a, b+1]
 then push 1     ; [a, b+1, 1]
 then sub        ; [a, b]
+then push 49    ;                                                   ; PROCEDURE: toChar (1)
+then add        ;                                                   ; PROCEDURE: toChar (2)
 then print      ; [a]
 then pop        ; []
