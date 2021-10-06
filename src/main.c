@@ -62,13 +62,8 @@ int main(int argc, char **argv) {
         // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 
-        //printf("%d:%d (%d,%d,%d,%d)\n", i, runtime->line_num, runtime->cond, runtime->cond_triggered, runtime->cond_carry, runtime->cond_type);
-
         // delegate execution amongst executor
         DelegateExecution(c, runtime);
-
-        //printf("%d:%d (%d,%d,%d,%d)\n", i, runtime->line_num, runtime->cond, runtime->cond_triggered, runtime->cond_carry, runtime->cond_type);
-
 
         // move to the correct line
         setLine(fp, runtime->line_num);

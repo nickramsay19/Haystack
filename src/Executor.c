@@ -9,8 +9,6 @@
 #define BUFFER_SIZE 3
 
 // method headers
-int ExecuteConditionally(Command c, Runtime runtime);
-int ExecuteLoop(Command c, Runtime runtime);
 int Execute(Command c, Runtime runtime);
 
 int DelegateExecution(Command c, Runtime runtime) {
@@ -39,10 +37,9 @@ int DelegateExecution(Command c, Runtime runtime) {
     case DIV:
     case MOD:
     case JUMP:
+    case LOOP:
         Execute(c, runtime);
         break;
-    case LOOP:
-        ExecuteLoop(c, runtime);
     case NONE:
         break;
     default:
@@ -53,14 +50,6 @@ int DelegateExecution(Command c, Runtime runtime) {
 
     // increment line number
     runtime->line_num++;
-
-    return 1;
-}
-
-int ExecuteLoop(Command c, Runtime runtime) {
-    // edit runtime
-    runtime->loop_depth++;
-    runtime->loop_reference[runtime->loop_depth] = runtime->line_num;
 
     return 1;
 }
@@ -146,10 +135,6 @@ int Execute(Command c, Runtime runtime) {
 
         // cancel non-executing commands
         if (!runtime->executing) {
-
-            // increment line number before ending execution
-            //runtime->line_num++;
-
             return 0; // dont execute
         }
     }
@@ -218,6 +203,10 @@ int Execute(Command c, Runtime runtime) {
         runtime->cond_triggered = false;
         runtime->cond_type = COND_NONE;
 
+        break;
+    case LOOP:
+        runtime->loop_depth++;
+        runtime->loop_reference[runtime->loop_depth] = runtime->line_num;
         break;
     default:
         break;
