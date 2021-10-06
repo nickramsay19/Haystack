@@ -1,6 +1,4 @@
-# c-template specific
-build/*
-main
+build/haystack
 
 # Common files
 .vscode
