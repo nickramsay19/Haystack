@@ -10,6 +10,20 @@ Haystack is an esoteric programming language that disallows the storage of memor
 - **Functions & classes** - Haystack does not support definitions of functions and classes. Essential operations such as addition, subtraction, etc are provided via inbuilt commands.
 - **Logical operations** - Common logical operators in other languages such as `&&`, `||` and `!` (negation) are not provided in Haystack. In Haystack, these operations must be performed manually and mathematically.
 
+## Usage & Compilation (MacOS)
+```
+make
+cd bin
+./haystack <YOUR_CODE>.hst
+```
+
+There are ready-made examples in the build directory. For example:
+```
+./haystack examples/basic/hello-world.hst
+```
+
+## Examples
+
 ### Example: Hello,  world! In Haystack
 In the following Hello world example, notice how items are pushed in reverse order. This is of course due the fact that printing will print the item on top i.e. the last item added.
 ```
@@ -41,13 +55,6 @@ print
 print
 print
 print
-```
-
-## Usage & Compilation (MacOS)
-```
-make
-cd bin
-./haystack <YOUR_CODE>.hay
 ```
 
 ## Basic usage and commands
@@ -99,10 +106,6 @@ cd bin
             This means, that each loop can only have one **jump** statement associated with it.
 
 ## Backlog
-- Char support.
-    - Store and print ASCII values to/from the stack.
 - Improve comment parsing.
 - Division by zero error.
-- Allow the pushing of chars.
-    - e.g. `push 'c'` 
 - Write README section on all examples.
