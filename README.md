@@ -114,3 +114,6 @@ print
         - Add "pprint x" - Pushes then prints x
         - Add "cprint" - Copies then prints
 - Check for "maybe maybe"
+    - Consider allowing it for "and"
+- Refactor file reading code, add new header, store code in memory
+- Consider adding max, min, size
