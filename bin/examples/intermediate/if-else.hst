@@ -1,0 +1,11 @@
+; If-else Pattern
+; By Nicholas Ramsay
+;
+;   This program produces an if-else statement. Haystack doesn't by default have a catch-all else statement.
+;   So we must manually force an 'or' statement to trigger if the first conditions don't.
+
+push 1              ; [1]           ; Condition to trigger the else statement if the if statement doesn't trigger
+push 0              ; [1,0]         ; Condition to trigger if
+maybe pop           ; [1] or []     ; Clear the else condition, since it is not needed anymore
+then DO_SOMETHING   ;               ; Fill out the if statement here
+or DO_SOMETHING     ;               ; Fill out the else statement here

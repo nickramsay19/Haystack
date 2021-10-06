@@ -1,6 +1,0 @@
-; this program produces an if-else statement
-push 1          ; condition to trigger the else statement if the if statement doesn't trigger
-read            ; condition to trigger if
-maybe pop       ; clear the else condition
-; execute the if triggered statements here
-or push 1       ; replace "push 1" with the else triggered statements
