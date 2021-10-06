@@ -1,0 +1,8 @@
+push '\n'
+push 'b'
+push '\t'
+push 'a'
+print
+print
+print
+print

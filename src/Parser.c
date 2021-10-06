@@ -60,7 +60,7 @@ Command Parse(char **tokens, Runtime runtime) {
     } else if(strcmp(tokens[0], "print") == 0) {
         return PRINT;
     } else if(strcmp(tokens[0], "push") == 0) {
-        Command c = ParsePush(tokens, runtime);
+        Command c = ParsePush(&tokens[1], runtime);
         return c;
     } else if(strcmp(tokens[0], "copy") == 0) {
         return COPY;
@@ -113,12 +113,15 @@ Command Parse(char **tokens, Runtime runtime) {
 
 // utility methods
 Command ParsePush(char **tokens, Runtime runtime) {
-
+    
     // declare integer to be pushed to stack
     int j;
 
+    //printf("\"%s\"\n", tokens[0]);
+
     // check if char specified
     if (tokens[0][0] == '\'') {
+        
         if (strcmp(tokens[0], "'\\n'") == 0) {
             j = 10; // newline in ASCII
 
@@ -138,7 +141,7 @@ Command ParsePush(char **tokens, Runtime runtime) {
         j = atoi(tokens[1]);
     }
 
-    
+    //printf("%d\n", j);
 
     // move value into payload
     runtime->payload[0] = j;

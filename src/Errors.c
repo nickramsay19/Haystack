@@ -25,5 +25,7 @@ int HandleError(Runtime r) {
         printf("Error: Unknown error (line: %d).\n", r->line_num);
         return 0;
     }
+
+    return 0;
 }
 
