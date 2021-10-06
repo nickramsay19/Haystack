@@ -1,4 +1,4 @@
-build/haystack
+bin/haystack
 
 # Common files
 .vscode
