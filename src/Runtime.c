@@ -4,6 +4,7 @@
 
 #include "include/Stack.h"
 #include "include/Runtime.h"
+#include "include/Errors.h"
 
 Runtime RuntimeNew() {
     Runtime r = (Runtime) malloc(sizeof(struct RuntimeRep));
@@ -21,7 +22,7 @@ Runtime RuntimeNew() {
 
     r->line_num = 1; // start execution on line 1
 
-    r->error = false;
+    r->error_type = ERROR_NONE;
 
     return r;
 }

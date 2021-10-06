@@ -7,6 +7,7 @@
 #include "include/Stack.h"
 #include "include/Parser.h"
 #include "include/Runtime.h"
+#include "include/Errors.h"
 
 #define MAX_STRING 1000
 #define MAX_WORD 50
@@ -97,7 +98,7 @@ Command Parse(char **tokens, Runtime runtime) {
          if (!runtime->cond) {
             // set the execution to false
             runtime->executing = false;
-            runtime->error = true;
+            runtime->error_type = ERROR_COND;
             return COND_ERROR;
         } else {
             //runtime->then = true;

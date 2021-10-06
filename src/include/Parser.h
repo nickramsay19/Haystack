@@ -8,7 +8,7 @@ enum CommandEnum {
     TYPE_ERROR = -2,
     SYNTAX_ERROR = -1,
     NONE,
-    READ, // we only have integers for now
+    READ,
     PRINT,
     PUSH,
     COPY,

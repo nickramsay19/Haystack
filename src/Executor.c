@@ -5,6 +5,7 @@
 #include "include/Stack.h"
 #include "include/Runtime.h"
 #include "include/Executor.h"
+#include "include/Errors.h"
 
 #define BUFFER_SIZE 3
 
@@ -13,58 +14,12 @@ int Execute(Command c, Runtime runtime);
 
 int DelegateExecution(Command c, Runtime runtime) {
 
-    switch (c)
-    {
-    case TYPE_ERROR:
-        runtime->error = true;
-        printf("Error: Type error (line: %d) in execution.\n", runtime->line_num);
-        return 0;
-    case SYNTAX_ERROR:
-        runtime->error = true;
-        printf("Error: Syntax error (line: %d) in execution.\n", runtime->line_num);
-        return 0;
-    case COND_ERROR:
-        runtime->error = true;
-        printf("Error: Conditional error (line: %d) in execution.\nNote: Is there an incorrectly structured conditional sequence?\n", runtime->line_num);
-    case READ:
-    case PRINT:
-    case PUSH:
-    case COPY:
-    case POP:
-    case ADD:
-    case SUB: 
-    case MULT:
-    case DIV:
-    case MOD:
-    case JUMP:
-    case LOOP:
-        Execute(c, runtime);
-        break;
-    case NONE:
-        break;
-    default:
-        runtime->error = true;
-        printf("Error: Unknown error (line: %d) in execution.\nHave you entered a nonexistent command?\n", runtime->line_num);
-        return 0;
-    }
-
-    // increment line number
-    runtime->line_num++;
-
-    return 1;
-}
-
-int Execute(Command c, Runtime runtime) {
-
-    int *buffer = calloc(BUFFER_SIZE, sizeof(int));
-    char *read = malloc(sizeof(char));
-
     if (runtime->cond) {
 
         // check for conditional loop header
         if (c == LOOP) {
             runtime->executing = false;
-            runtime->error = true;
+            runtime->error_type = ERROR_COND_LOOP;
             return 0;
         }
 
@@ -135,9 +90,25 @@ int Execute(Command c, Runtime runtime) {
 
         // cancel non-executing commands
         if (!runtime->executing) {
+            // increment line number
+            runtime->line_num++;
+
             return 0; // dont execute
         }
     }
+
+    Execute(c, runtime);
+
+    // increment line number
+    runtime->line_num++;
+
+    return 1;
+}
+
+int Execute(Command c, Runtime runtime) {
+
+    int *buffer = calloc(BUFFER_SIZE, sizeof(int));
+    char *read = malloc(sizeof(char));
 
     switch (c) {
     case READ:

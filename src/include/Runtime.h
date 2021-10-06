@@ -2,18 +2,28 @@
 #define RUNTIME_H
 
 #include <stdbool.h>
+
 #include "Stack.h"
 
 #define MAX_PAYLOAD 2
 #define MAX_LOOP_DEPTH 10
 
 enum ConditionTypeEnum {
+    COND_NONE,
     COND_MAYBE,
     COND_OR,
-    COND_THEN,
-    COND_NONE,
+    COND_THEN
 };
 typedef enum ConditionTypeEnum ConditionType;
+
+enum ErrorTypeEnum {
+    ERROR_NONE,
+    ERROR_SYNTAX,
+    ERROR_COND,
+    ERROR_DIVISION,
+    ERROR_COND_LOOP
+};
+typedef enum ErrorTypeEnum ErrorType;
 
 struct RuntimeRep {
     int *payload; // payload carries parsed tokens to the executor
@@ -32,11 +42,10 @@ struct RuntimeRep {
 
     bool then;
 
-    bool error;
+    ErrorType error_type;
 
     Stack stack;
 };
-
 typedef struct RuntimeRep *Runtime;
 
 Runtime RuntimeNew();

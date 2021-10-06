@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "include/Stack.h"
+#include "include/Errors.h"
 #include "include/Parser.h"
 #include "include/Executor.h"
 #include "include/Runtime.h"
@@ -51,26 +52,23 @@ int main(int argc, char **argv) {
     // initalise runtime state
     Runtime runtime = RuntimeNew();
 
-    char *fg = fgets(buf, MAX_STRING, fp);
+    char *fg;// = fgets(buf, MAX_STRING, fp);
 
-    int limit = 10200;
-    int i = 0;
-
-    while (fg != NULL && !runtime->error) {
-        i++;
+    while (fgets(buf, MAX_STRING, fp) != NULL) {
 
         // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 
-        // delegate execution amongst executor
-        DelegateExecution(c, runtime);
+        if (runtime->error_type != ERROR_NONE) {
+            HandleError(runtime);
+            break;
+        } else {
+            // delegate execution amongst executor
+            DelegateExecution(c, runtime);
+        }
 
         // move to the correct line
         setLine(fp, runtime->line_num);
-        ///printf("%d:%d\n", i, runtime->line_num);
-
-        fg = fgets(buf, MAX_STRING, fp);
-        
     }
     
     // free memory, close files
