@@ -21,7 +21,8 @@ enum ErrorTypeEnum {
     ERROR_SYNTAX,
     ERROR_COND,
     ERROR_DIVISION,
-    ERROR_COND_LOOP
+    ERROR_COND_LOOP,
+    ERROR_PUSH_INVALID,
 };
 typedef enum ErrorTypeEnum ErrorType;
 

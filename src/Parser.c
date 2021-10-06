@@ -30,9 +30,6 @@ Command ParseStatement(char* stmt, Runtime runtime) {
     // assume we execute the line
     runtime->executing = true;
 
-    // assume that the command isn't a then command
-    //runtime->then = false;
-
     // assume the cond_type is none
     runtime->cond_type = COND_NONE;
 
@@ -116,10 +113,32 @@ Command Parse(char **tokens, Runtime runtime) {
 
 // utility methods
 Command ParsePush(char **tokens, Runtime runtime) {
-    // we assume that the second token in an integer
-    // we simply convert tokens[1] to an int
 
-    int j = atoi(tokens[1]);
+    // declare integer to be pushed to stack
+    int j;
+
+    // check if char specified
+    if (tokens[0][0] == '\'') {
+        if (strcmp(tokens[0], "'\\n'") == 0) {
+            j = 10; // newline in ASCII
+
+        } else if (strcmp(tokens[0], "'\\t'") == 0) {
+            j = 9; // tab in ASCII
+
+        } else if (tokens[0][2] == '\'') {
+            j = (int) tokens[0][1];
+
+        } else {
+            runtime->error_type = ERROR_PUSH_INVALID;
+            return PUSH;
+        }
+
+    // otherwise, we assume an integer literal has been passed
+    } else {
+        j = atoi(tokens[1]);
+    }
+
+    
 
     // move value into payload
     runtime->payload[0] = j;
