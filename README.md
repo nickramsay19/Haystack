@@ -5,7 +5,7 @@
 Haystack is an esoteric programming language that disallows the storage of memory outside of a stack data structure. That is, the language doesn't support variables and all data is stored on a stack. Conditional statments, loop conditions and all operations are performed on items at the top of the stack.
 
 ### Other notable features
-- **Datatypes** - Haystack has direct support for integers exclusively. However, characters can be interpreted through their ASCII representation and are converted to/from integers during IO procedures.
+- **Datatypes** - Haystack has internal support for integers exclusively. In fact, Haystack will only store integers on the stack. However, characters can be interpreted through their ASCII representation and are converted to/from integers during IO procedures.
 - **Unconditional Else** - Haystack has `if` and `else if` equivalents from other languages, precisely the `maybe` and `or` commands respectively. However, Haystack doesn't have an `else` condition. To perform a catch-all `else` condition, an `or` (equivalent to `else if`) condition must be manually forced to trigger.
 - **Functions & classes** - Haystack does not support definitions of functions and classes. Essential operations such as addition, subtraction, etc are provided via inbuilt commands.
 - **Logical operations** - Common logical operators in other languages such as `&&`, `||` and `!` (negation) are not provided in Haystack. In Haystack, these operations must be performed manually and mathematically.
@@ -126,4 +126,3 @@ print
 - [x] Add comment parsing
 - [x] Add looping via jumps
 - [x] Add conditionals
-- [x]
