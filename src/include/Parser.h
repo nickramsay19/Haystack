@@ -4,9 +4,6 @@
 #include "Runtime.h"
 
 enum CommandEnum {
-    COND_ERROR = -3,
-    TYPE_ERROR = -2,
-    SYNTAX_ERROR = -1,
     NONE,
     READ,
     PRINT,

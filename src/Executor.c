@@ -158,6 +158,7 @@ int Execute(Command c, Runtime runtime) {
         if (buffer[0] != 0) {
             runtime->stack = StackPush(runtime->stack, buffer[1] / buffer[0]);
         } else {
+            runtime->error_type = ERROR_DIVISION;
             return 0;
         }
         break;
@@ -167,11 +168,12 @@ int Execute(Command c, Runtime runtime) {
         if (buffer[0] != 0) {
             runtime->stack = StackPush(runtime->stack, buffer[1] % buffer[0]);
         } else {
+            runtime->error_type = ERROR_DIVISION;
             return 0;
         }
         break;
     case JUMP:
-    
+
         // set runtime line number
         runtime->line_num = runtime->loop_reference[runtime->loop_depth];
 

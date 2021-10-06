@@ -113,3 +113,4 @@ print
     - Add standard library of macros
         - Add "pprint x" - Pushes then prints x
         - Add "cprint" - Copies then prints
+- Check for "maybe maybe"

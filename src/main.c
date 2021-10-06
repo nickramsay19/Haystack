@@ -59,12 +59,15 @@ int main(int argc, char **argv) {
         // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 
+        // execute if no parsing errors detected
+        if (runtime->error_type == ERROR_NONE) {
+            DelegateExecution(c, runtime);
+        }
+
+        // handle errors caught in parsing and execution
         if (runtime->error_type != ERROR_NONE) {
             HandleError(runtime);
             break;
-        } else {
-            // delegate execution amongst executor
-            DelegateExecution(c, runtime);
         }
 
         // move to the correct line

@@ -85,7 +85,9 @@ Command Parse(char **tokens, Runtime runtime) {
         if (!runtime->cond) {
             // set the execution to false
             runtime->executing = false;
-            return COND_ERROR;
+            
+            runtime->error_type = ERROR_COND;
+            return NONE;
         } else {
             //runtime->cond_carry = 0;
             runtime->cond_type = COND_OR;
@@ -96,7 +98,7 @@ Command Parse(char **tokens, Runtime runtime) {
             // set the execution to false
             runtime->executing = false;
             runtime->error_type = ERROR_COND;
-            return COND_ERROR;
+            return NONE;
         } else {
             //runtime->then = true;
             runtime->cond_type = COND_THEN;
@@ -107,7 +109,8 @@ Command Parse(char **tokens, Runtime runtime) {
     } else if(strcmp(tokens[0], "jump") == 0) {
         return JUMP;
     } else {
-        return SYNTAX_ERROR;
+        runtime->error_type = ERROR_SYNTAX;
+        return NONE;
     }
 }
 
