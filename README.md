@@ -105,3 +105,4 @@ cd bin
 - Division by zero error.
 - Allow the pushing of chars.
     - e.g. `push 'c'` 
+- Write README section on all examples.
