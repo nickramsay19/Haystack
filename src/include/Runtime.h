@@ -11,6 +11,9 @@ struct RuntimeRep {
     int *payload; // payload carries parsed tokens to the executor
 
     bool cond; // conditional sequence flag
+    bool cond_continue; // 
+
+    bool cond_triggered;
     bool cond_carry; // carry to a then
     
     int loop_depth; // loop depth

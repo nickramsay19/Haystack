@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "include/Stack.h"
 #include "include/Runtime.h"
@@ -11,8 +12,10 @@ Runtime RuntimeNew() {
 
     r->payload = calloc(MAX_PAYLOAD, sizeof(int));
 
-    r->cond = 0;
-    r->cond_carry = 0;
+    r->cond = false;
+    r->cond_carry = false;
+    r->cond_continue = false;
+    r->cond_triggered= false;
 
     r->loop_depth = 0;
     r->loop_reference = calloc(MAX_LOOP_DEPTH, sizeof(int));

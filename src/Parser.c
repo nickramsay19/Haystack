@@ -73,11 +73,11 @@ Command Parse(char **tokens, Runtime runtime) {
         return MOD;
     } else if(strcmp(tokens[0], "maybe") == 0) {
         // set the cond flag to enter a conditional sequence
-        runtime->cond = 1;
-        runtime->cond_carry = 0; // could this be true already, what would that imply?
+        runtime->cond = true;
+        runtime->cond_carry = true; // could this be true already, what would that imply?
         return Parse((&tokens[1]), runtime);
     } else if(strcmp(tokens[0], "or") == 0) {
-        if (runtime->cond == 0) {
+        if (runtime->cond) {
             // set the execution to false
             runtime->executing = false;
         }

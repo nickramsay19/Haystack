@@ -56,36 +56,21 @@ int main(int argc, char **argv) {
     int limit = 10200;
     int i = 0;
 
-    while (fg != NULL && !runtime->error && i < limit) {
+    while (fg != NULL && !runtime->error) {
         i++;
-        //printf("%d\n", i);
+        
         // parse statment to a command, collect runtime flag changes for pre-execution
         Command c = ParseStatement(buf, runtime);
 
-        //printf("finished parser\n");
-
         // delegate execution amongst executor
         DelegateExecution(c, runtime);
-        //printf("finished execution\n");
-        //printf("error flag = %d, line = %d\n", runtime->error, runtime->line_num);
 
         // move to the correct line
-        //fseek(fp, SEEK_SET, runtime->line_num);
         setLine(fp, runtime->line_num);
-        //printf("jumped to line %d\n", runtime->line_num);
-        //printStack(runtime->stack);
-        //printf("loop depth: %d\n", runtime->loop_depth);
+        ///printf("%d:%d\n", i, runtime->line_num);
 
-        //printf("retriveding next line:\n");
         fg = fgets(buf, MAX_STRING, fp);
         
-        //printf("fg null: %s\n", fg == NULL ? "true" : "false");
-
-        //printf("eof: %s\n", feof(fp) ? "true" : "false");
-        //printf("ferror: %s\n", ferror(fp) ? "true" : "false");
-
-        //printf("printing fg:\n");
-        //printf("\nfinihsed printing fg\n");
     }
     
     // free memory, close files
