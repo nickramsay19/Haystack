@@ -108,16 +108,19 @@ cd bin
 
 cond type
 - Maybe x
-    - set cond to be true (i.e. open a cond sequence)
-    - check if cond passes
+    - Parse: set cond to be true (i.e. open a cond sequence)
+    - exec: check if cond passes
     - set runtime->cond_triggered
     - execute x if top of the stack evals to true
     - set carry if true
     - set carry if false
 - Or x
-    - check that cond is set, if not throw err
-    - check that cond_triggered is false
-    - then preced with same as maybe x
+    - parse: check that cond is set, if not throw err
+    - parse: set the cond_or
+    - exec: check that cond_triggered is false
+    - exec: then preceded with same as maybe x
 - then x
-    - check that cond is set, if not throw err
-    - check if carry is true, then execute
+    - parse: check that cond is set, if not throw err
+    - parse: set then to true
+    - exec: check if carry is true, then execute
+- jump

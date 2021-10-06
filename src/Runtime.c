@@ -14,7 +14,6 @@ Runtime RuntimeNew() {
 
     r->cond = false;
     r->cond_carry = false;
-    r->cond_continue = false;
     r->cond_triggered= false;
 
     r->loop_depth = 0;

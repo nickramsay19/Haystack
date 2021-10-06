@@ -7,14 +7,21 @@
 #define MAX_PAYLOAD 2
 #define MAX_LOOP_DEPTH 10
 
+enum ConditionTypeEnum {
+    COND_MAYBE,
+    COND_OR,
+    COND_THEN,
+    COND_NONE,
+};
+typedef enum ConditionTypeEnum ConditionType;
+
 struct RuntimeRep {
     int *payload; // payload carries parsed tokens to the executor
 
-    bool cond; // conditional sequence flag
-    bool cond_continue; // 
-
-    bool cond_triggered;
+    bool cond; // conditional sequence flag, true if currently in a cond sequence
+    bool cond_triggered; // true if the current cond seq has had a true triggered
     bool cond_carry; // carry to a then
+    ConditionType cond_type;
     
     int loop_depth; // loop depth
     int *loop_reference;

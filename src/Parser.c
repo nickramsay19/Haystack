@@ -30,10 +30,10 @@ Command ParseStatement(char* stmt, Runtime runtime) {
     runtime->executing = true;
 
     // assume that the command isn't a then command
-    runtime->then = false;
+    //runtime->then = false;
 
-    // assume the statement isn't conditional
-    runtime->cond = false;
+    // assume the cond_type is none
+    runtime->cond_type = COND_NONE;
 
     // strip comments
     int count = 0;
@@ -41,11 +41,18 @@ Command ParseStatement(char* stmt, Runtime runtime) {
     
     // convert statement to array of word tokens
     int words = 0;
-    char **stmtwords = Split(stmtcpy, &words);
+    char **tokens = Split(stmtcpy, &words);
 
-    debugp(1);
+    // first check if this statement is not a conditional
+    // if not, set the cond flag to false, ending a conditional sequence
+    if (strcmp(tokens[0], "maybe") != 0 && strcmp(tokens[0], "or") != 0 && strcmp(tokens[0], "then") != 0){
+        // set the cond flag to false
+        runtime->cond = false;
+        runtime->cond_triggered = false;
+        runtime->cond_carry = false;
+    }
 
-    return Parse(stmtwords, runtime);
+    return Parse(tokens, runtime);
 }
 
 Command Parse(char **tokens, Runtime runtime) {
@@ -74,18 +81,29 @@ Command Parse(char **tokens, Runtime runtime) {
     } else if(strcmp(tokens[0], "maybe") == 0) {
         // set the cond flag to enter a conditional sequence
         runtime->cond = true;
-        runtime->cond_carry = true; // could this be true already, what would that imply?
+        runtime->cond_type = COND_MAYBE;
         return Parse((&tokens[1]), runtime);
     } else if(strcmp(tokens[0], "or") == 0) {
-        if (runtime->cond) {
+        if (!runtime->cond) {
             // set the execution to false
             runtime->executing = false;
+            return COND_ERROR;
+        } else {
+            //runtime->cond_carry = 0;
+            runtime->cond_type = COND_OR;
+            return Parse((&tokens[1]), runtime);
         }
-        runtime->cond_carry = 0;
-        return Parse((&tokens[1]), runtime);
     } else if(strcmp(tokens[0], "then") == 0) {
-        runtime->then = true;
-        return Parse((&tokens[1]), runtime);
+         if (!runtime->cond) {
+            // set the execution to false
+            runtime->executing = false;
+            runtime->error = true;
+            return COND_ERROR;
+        } else {
+            //runtime->then = true;
+            runtime->cond_type = COND_THEN;
+            return Parse((&tokens[1]), runtime);
+        }
     } else if(strcmp(tokens[0], "loop") == 0) {
         return LOOP;
     } else if(strcmp(tokens[0], "jump") == 0) {

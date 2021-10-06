@@ -11,20 +11,9 @@
 // method headers
 int ExecuteConditionally(Command c, Runtime runtime);
 int ExecuteLoop(Command c, Runtime runtime);
-int ExecuteJump(Command c, Runtime runtime);
 int Execute(Command c, Runtime runtime);
 
 int DelegateExecution(Command c, Runtime runtime) {
-
-    // first check the then flag
-    if (runtime->then && !runtime->cond_carry) {
-        // increment line number
-        runtime->line_num++;
-        return 0;
-    } else if (!runtime->then) {
-        // if the statement isn't a then, ensure no conds carry forward
-        runtime->cond_carry = false;
-    }
 
     switch (c)
     {
@@ -38,7 +27,7 @@ int DelegateExecution(Command c, Runtime runtime) {
         return 0;
     case COND_ERROR:
         runtime->error = true;
-        printf("Error: Conditional error (line: %d) in execution.\nDid you put a conditional statement within a conditional statement?\n", runtime->line_num);
+        printf("Error: Conditional error (line: %d) in execution.\nNote: Is there an incorrectly structured conditional sequence?\n", runtime->line_num);
     case READ:
     case PRINT:
     case PUSH:
@@ -49,17 +38,11 @@ int DelegateExecution(Command c, Runtime runtime) {
     case MULT:
     case DIV:
     case MOD:
+    case JUMP:
         Execute(c, runtime);
         break;
     case LOOP:
         ExecuteLoop(c, runtime);
-    case JUMP:
-        if (runtime->then || runtime->cond) {
-            ExecuteConditionally(c, runtime);
-        } else {
-            ExecuteJump(c, runtime);
-        }
-        break;
     case NONE:
         break;
     default:
@@ -74,45 +57,10 @@ int DelegateExecution(Command c, Runtime runtime) {
     return 1;
 }
 
-int ExecuteConditionally(Command c, Runtime runtime) {
-    int *pop = malloc(sizeof(int));
-
-    // set the carry flag, we assume we wont carry
-    runtime->cond_carry = 0;
-
-    runtime->stack = StackPop(runtime->stack, pop);
-
-    if (*pop) {
-
-        Execute(c, runtime);
-
-        // set the contional carry flag
-        runtime->cond_carry = 1;
-
-        // end the conditional sequence
-        runtime->cond = 0;
-
-    } else if (c == JUMP) {
-        runtime->loop_depth--;
-    }
-
-    free(pop);
-
-    return 1;
-}
-
 int ExecuteLoop(Command c, Runtime runtime) {
     // edit runtime
     runtime->loop_depth++;
     runtime->loop_reference[runtime->loop_depth] = runtime->line_num;
-
-    return 1;
-}
-
-int ExecuteJump(Command c, Runtime runtime) {
-
-    // set runtime line number
-    runtime->line_num = runtime->loop_reference[runtime->loop_depth];// + 1;
 
     return 1;
 }
@@ -122,28 +70,86 @@ int Execute(Command c, Runtime runtime) {
     int *buffer = calloc(BUFFER_SIZE, sizeof(int));
     char *read = malloc(sizeof(char));
 
-    // set the carry flag, we assume we wont carry
-    runtime->cond_carry = 0;
-
     if (runtime->cond) {
-        runtime->stack = StackPop(runtime->stack, &buffer[0]);
-        bool cond = buffer[0];
 
-        // check if the condition passes to execute
-        if (cond && c == JUMP) {
+        // check for conditional loop header
+        if (c == LOOP) {
+            runtime->executing = false;
+            runtime->error = true;
+            return 0;
+        }
 
-            // set the contional carry flag
-            runtime->cond_carry = 1;
+        // first we check the stack condition
+        int pass = 0;
 
-            // end the conditional sequence
-            runtime->cond = 0;
-        
-        // check for failed jump on failed cond
-        } else if (c == JUMP) {
-            runtime->loop_depth--;
-            return 0; // dont execute
+        switch (runtime->cond_type) {
+        case COND_MAYBE:
             
-        } else {
+            // pop the stack condition
+            runtime->stack = StackPop(runtime->stack, &pass);
+
+            if (pass) {
+                runtime->cond_carry = true;
+                runtime->cond_triggered = true;
+                runtime->executing = true;
+            } else {
+                runtime->cond_carry = false;
+                runtime->cond_triggered = false;
+                runtime->executing = false;
+            }
+            break;
+        case COND_OR:
+
+            // pop the stack condition
+            runtime->stack = StackPop(runtime->stack, &pass);
+
+            // check the previous conditions exclusion rule before checking stack condition
+            if (runtime->cond_triggered) {
+
+                // set the carry to ensure no further then's are called
+                runtime->cond_carry = false;
+
+                // push back the condition, since we needn't have checked it
+                runtime->stack = StackPop(runtime->stack, &pass);
+
+                // cancel execution, conditions didn't trigger
+                runtime->executing = false;
+            } else if (pass) {
+                runtime->cond_carry = true;
+                runtime->cond_triggered = true;
+                runtime->executing = true;
+            } else {
+                runtime->cond_carry = false;
+                runtime->cond_triggered = false;
+                runtime->executing = false;
+            }
+            break;
+        case COND_THEN:
+            if (!runtime->cond_carry) {
+                // do not execute, previous condition did not pass
+                runtime->executing = false;
+            } else {
+                runtime->cond_carry = true;
+                runtime->cond_triggered = true;
+                runtime->executing = true;
+            }
+            break;
+        default:
+            // error
+            break;
+        }
+
+        // Check for failed jumps
+        if (!runtime->executing && c == JUMP) {
+            runtime->loop_depth--;
+        } 
+
+        // cancel non-executing commands
+        if (!runtime->executing) {
+
+            // increment line number before ending execution
+            //runtime->line_num++;
+
             return 0; // dont execute
         }
     }
@@ -203,7 +209,15 @@ int Execute(Command c, Runtime runtime) {
         }
         break;
     case JUMP:
-        ExecuteJump(c, runtime);
+        // set runtime line number
+        runtime->line_num = runtime->loop_reference[runtime->loop_depth];
+
+        // since we are jumping, we need to reset cond flags to default
+        runtime->cond = false;
+        runtime->cond_carry = false;
+        runtime->cond_triggered = false;
+        runtime->cond_type = COND_NONE;
+
         break;
     default:
         break;

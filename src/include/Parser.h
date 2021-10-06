@@ -49,13 +49,6 @@ enum CommandEnum {
 };
 typedef enum CommandEnum Command;
 
-enum ConditionTypeEnum {
-    COND_TYPE_START,
-    COND_TYPE_CONTINUE,
-    COND_TYPE_END
-};
-typedef enum ConditionTypeEnum ConditionType;
-
 Command ParseStatement(char* stmt, Runtime runtime);
 
 #endif
