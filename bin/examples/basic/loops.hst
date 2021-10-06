@@ -1,0 +1,21 @@
+; For-loop Pattern
+; By Nicholas Ramsay
+;
+;   This program prints digits from 0 to 9.
+
+
+;           ; Stack representation  ; Comment
+push 48     ; [x], x = 0            ; Start the loop with x = 0
+loop
+copy        ; [x, x]                ; Copy before printing
+print       ; [x]                   ; Print current number
+push 10     ; [x, 10]               ; Push newline
+print       ; [x]                   ; Print newline
+push 1      ; [x, 1]
+add         ; [X], X = x + 1        ; Add 1 to the current number
+copy        ; [X, X]                ; Copy before checking jump condition
+push 58     ; [X, X, 58]            ; ';' - Loop limit: stop looping once number reaches 9
+sub         ; [X, X - 58]
+maybe jump  ; [X]                   ; Jump if (X-58 != 0). i.e. 
+                                    ; Otherwise if X == 58, end looping.
+

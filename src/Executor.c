@@ -31,12 +31,14 @@ int DelegateExecution(Command c, Runtime runtime) {
             
             // pop the stack condition
             runtime->stack = StackPop(runtime->stack, &pass);
-
+            //printf("(%d)\n", pass);
             if (pass) {
+                //printf("1\n");
                 runtime->cond_carry = true;
                 runtime->cond_triggered = true;
                 runtime->executing = true;
             } else {
+                //printf("2\n");
                 runtime->cond_carry = false;
                 runtime->cond_triggered = false;
                 runtime->executing = false;
@@ -86,11 +88,13 @@ int DelegateExecution(Command c, Runtime runtime) {
         // Check for failed jumps
         if (!runtime->executing && c == JUMP) {
             runtime->loop_depth--;
+            //printf("cancel jump!\n");
         } 
 
         // cancel non-executing commands
         if (!runtime->executing) {
             // increment line number
+            //printf("cancel!\n");
             runtime->line_num++;
 
             return 0; // dont execute
@@ -117,7 +121,8 @@ int Execute(Command c, Runtime runtime) {
         break;
     case PRINT:
         runtime->stack = StackPop(runtime->stack, &buffer[0]);
-        printf("%c", (char) buffer[0]);
+        //printf("(%c,%d)", (char) buffer[0], buffer[0]);
+        printf("%c", (char) buffer[0], buffer[0]);
         break;
     case PUSH:
         // number to push should be in res
@@ -139,7 +144,8 @@ int Execute(Command c, Runtime runtime) {
     case SUB: 
         runtime->stack = StackPop(runtime->stack, &buffer[0]);
         runtime->stack = StackPop(runtime->stack, &buffer[1]);
-        runtime->stack = StackPush(runtime->stack, buffer[1] - buffer[1]);
+        runtime->stack = StackPush(runtime->stack, buffer[1] - buffer[0]);
+        //printf("[SUB: (%c,%d) - (%c,%d) = (%c,%d)]\n", )
         break;
     case MULT:
         runtime->stack = StackPop(runtime->stack, &buffer[0]);
@@ -165,6 +171,7 @@ int Execute(Command c, Runtime runtime) {
         }
         break;
     case JUMP:
+    
         // set runtime line number
         runtime->line_num = runtime->loop_reference[runtime->loop_depth];
 
