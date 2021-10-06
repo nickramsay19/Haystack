@@ -106,14 +106,24 @@ print
             This means, that each loop can only have one **jump** statement associated with it.
 
 ## Backlog
-- Improve comment parsing.
-- Write README section on all examples.
-- Add macro definitions
-- Add imports of macros
+- [ ] Improve comment parsing.
+    - Allow comment only lines
+    - Allow blank lines
+- [ ] Write README section on all examples.
+- [ ] Add macro definitions
+- [ ] Add imports of macros
     - Add standard library of macros
         - Add "pprint x" - Pushes then prints x
         - Add "cprint" - Copies then prints
-- Check for "maybe maybe"
+- [ ] Check for "maybe maybe"
     - Consider allowing it for "and"
-- Refactor file reading code, add new header, store code in memory
-- Consider adding max, min, size
+- [ ] Refactor file reading code, add new header, store code in memory
+- [ ] Consider adding max, min, sizes, end
+- [x] Division by zero error.
+- [x] Allow pushing of character literals e.g. "push 'a'".
+- [x] Char support.
+    - Store and print ASCII values to/from the stack.
+- [x] Add comment parsing
+- [x] Add looping via jumps
+- [x] Add conditionals
+- [x]
