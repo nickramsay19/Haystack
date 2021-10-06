@@ -107,5 +107,9 @@ print
 
 ## Backlog
 - Improve comment parsing.
-- Division by zero error.
 - Write README section on all examples.
+- Add macro definitions
+- Add imports of macros
+    - Add standard library of macros
+        - Add "pprint x" - Pushes then prints x
+        - Add "cprint" - Copies then prints
