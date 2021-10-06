@@ -121,8 +121,7 @@ int Execute(Command c, Runtime runtime) {
         break;
     case PRINT:
         runtime->stack = StackPop(runtime->stack, &buffer[0]);
-        //printf("(%c,%d)", (char) buffer[0], buffer[0]);
-        printf("%c", (char) buffer[0], buffer[0]);
+        printf("%c", (char) buffer[0]);
         break;
     case PUSH:
         // number to push should be in res

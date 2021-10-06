@@ -120,8 +120,6 @@ Command ParsePush(char **tokens, Runtime runtime) {
     // declare integer to be pushed to stack
     int j;
 
-    //printf("\"%s\"\n", tokens[0]);
-
     // check if char specified
     if (tokens[0][0] == '\'') {
         
@@ -141,7 +139,8 @@ Command ParsePush(char **tokens, Runtime runtime) {
 
     // otherwise, we assume an integer literal has been passed
     } else {
-        j = atoi(tokens[1]);
+        
+        j = atoi(tokens[0]);
     }
 
     //printf("%d\n", j);

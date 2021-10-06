@@ -1,0 +1,5 @@
+push '\n'
+push 33
+print
+print
+print
