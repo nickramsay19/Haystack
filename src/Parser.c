@@ -36,6 +36,12 @@ Command ParseStatement(char* stmt, Runtime runtime) {
     // strip comments
     int count = 0;
     char *stmtcpy = StripComments(stmt, &count);
+
+    // check that the stmt isn't empty
+    if (count == 0) {
+        runtime->executing = false;
+        return NONE;
+    }
     
     // convert statement to array of word tokens
     int words = 0;
@@ -178,16 +184,29 @@ char *StripComments(char *words, int *count) {
     int words_len = strlen(words);
     char *wordscpy = calloc(words_len, sizeof(char));
 
-    int i = 0;
-    for (i = 0; i < words_len; i++) {
+    // store index of words char being read in i, index of wordscpy being written in k
+    int i = 0, k = 0;
+
+    // find the first non-whitespace
+    for (; i < words_len; i++) {
+        if (words[i] != ' ' && words[i] != '\t' && words[i] != '\n') {
+            break;
+        }
+    }
+
+    // add all chars up to the first semicolon
+    for (;i < words_len; i++) {
         if (words[i] == ';') {
             break;
         }
 
-        wordscpy[i] = words[i];
+        // don't add newlines
+        if (words[i] != '\n') {
+            wordscpy[k++] = words[i];
+        }
     }
 
-    *count = i;
+    *count = k;
 
     // shrink wordscpy
     wordscpy = realloc(wordscpy, i * sizeof(char));
