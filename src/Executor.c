@@ -186,6 +186,16 @@ int Execute(Command c, Runtime runtime) {
         runtime->loop_depth++;
         runtime->loop_reference[runtime->loop_depth] = runtime->line_num;
         break;
+    case MACRO:
+        if (runtime->macro) {
+            runtime->error_type = ERROR_MACRO_ALREADY_DEFINING;
+            runtime->executing = false;
+            return 0;
+        }
+        
+        break;
+    case DONE:
+        break;
     default:
         break;
     }

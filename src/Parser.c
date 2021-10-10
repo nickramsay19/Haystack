@@ -115,6 +115,14 @@ Command Parse(char **tokens, Runtime runtime) {
     } else if(strcmp(tokens[0], "jump") == 0) {
         return JUMP;
     } else if(strcmp(tokens[0], "macro") == 0) {
+        // get the second word
+        if (tokens[1]) {
+            strcpy(runtime->macro_name, tokens[1]);
+            // dont set the macro flag here
+        } else {
+            runtime->error_type = ERROR_MACRO_NO_NAME;
+            runtime->executing = false;
+        }
         return MACRO;
     } else if(strcmp(tokens[0], "done") == 0) {
         return DONE;

@@ -20,6 +20,9 @@ Runtime RuntimeNew() {
     r->loop_depth = 0;
     r->loop_reference = calloc(MAX_LOOP_DEPTH, sizeof(int));
 
+    r->macro = false;
+    r->macro_name = calloc(MAX_MACRO_NAME, sizeof(char));
+
     r->line_num = 1; // start execution on line 1
 
     r->error_type = ERROR_NONE;
@@ -28,6 +31,8 @@ Runtime RuntimeNew() {
 }
 
 void RuntimeFree(Runtime r) {
+
+    free(r->macro_name);
 
     StackFree(r->stack);
 

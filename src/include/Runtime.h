@@ -7,6 +7,7 @@
 
 #define MAX_PAYLOAD 2
 #define MAX_LOOP_DEPTH 10
+#define MAX_MACRO_NAME 25
 
 enum ConditionTypeEnum {
     COND_NONE,
@@ -23,6 +24,7 @@ enum ErrorTypeEnum {
     ERROR_DIVISION,
     ERROR_COND_LOOP,
     ERROR_PUSH_INVALID,
+    ERROR_MACRO_NO_NAME,
 };
 typedef enum ErrorTypeEnum ErrorType;
 
@@ -38,6 +40,7 @@ struct RuntimeRep {
     int *loop_reference;
 
     bool macro;
+    char *macro_name;
 
     int line_num;
 
