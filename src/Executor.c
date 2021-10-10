@@ -144,7 +144,6 @@ int Execute(Command c, Runtime runtime) {
         runtime->stack = StackPop(runtime->stack, &buffer[0]);
         runtime->stack = StackPop(runtime->stack, &buffer[1]);
         runtime->stack = StackPush(runtime->stack, buffer[1] - buffer[0]);
-        //printf("[SUB: (%c,%d) - (%c,%d) = (%c,%d)]\n", )
         break;
     case MULT:
         runtime->stack = StackPop(runtime->stack, &buffer[0]);

@@ -1,0 +1,32 @@
+;           ; Stack representation      ; Comment
+push 0      ; [0]                       ; add a zero as a break condition for the second loop
+read        ; [0, x]                    ; get SINGLE DIGIT num from user
+
+; convert user given digit to int
+push '0'
+sub
+
+; copy x then subtract 1 until we have 0
+loop
+copy        ; [0, x, x]
+push 1      ; [0, x, x, 1]
+sub         ; [0, x, X], X = x - 1      ; subtract one from x, call it X
+copy        ; [0, x, X, X]
+maybe jump  ; [0, x, X]                 ; jump if X != 0
+
+; now we have a stack of [0, x, x-1, x-2, ..., 1, 0]
+pop         ; [0, x, x-1, x-2, ..., 1]  ; get rid of the zero
+
+; loop until we reach the original break condition before x
+loop
+mult        ; [0, x, x-1, x-2, ..., 2*1]
+copy        
+push '0'    ; [0, x, x-1, x-2, ..., 2*1, 2*1, '0']
+add         ; [0, x, x-1, x-2, ..., 2*1, 2*1 + '0']
+print       ; [0, x, x-1, x-2, ..., 2*1]
+push '\n'   ; [0, x, x-1, x-2, ..., 2*1, '\n']
+print       ; [0, x, x-1, x-2, ..., 2*1]
+copy        ; copy before jumping
+maybe jump  
+
+

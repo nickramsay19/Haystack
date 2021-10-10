@@ -17,6 +17,8 @@ enum CommandEnum {
     MOD,
     JUMP,
     LOOP,
+    MACRO,
+    DONE,
 };
 typedef enum CommandEnum Command;
 

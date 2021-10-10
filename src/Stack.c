@@ -51,12 +51,13 @@ int StackLen(Stack s) {
     return len;
 }
 
-void printStack(Stack s) {
+void StackPrint(Stack s) {
     Stack t = s;
-    printf("%d, ", s->value);
+    printf("[%d", s->value);
     while (t && t->next) {
-        printf("%d, ", t->value);
         t = t->next;
+        printf(", %d", t->value);
+       
     }
-    printf("\n");
+    printf("]\n");
 }

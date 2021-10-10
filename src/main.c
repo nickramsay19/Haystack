@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     // initalise runtime state
     Runtime runtime = RuntimeNew();
 
-    char *fg;// = fgets(buf, MAX_STRING, fp);
+    char *fg;
 
     while (fgets(buf, MAX_STRING, fp) != NULL) {
 
@@ -64,6 +64,11 @@ int main(int argc, char **argv) {
             DelegateExecution(c, runtime);
         }
 
+        if (c != NONE && runtime->executing) {
+            //printf("%d: ", c);
+            //StackPrint(runtime->stack);
+        }
+
         // handle errors caught in parsing and execution
         if (runtime->error_type != ERROR_NONE) {
             HandleError(runtime);
@@ -72,6 +77,8 @@ int main(int argc, char **argv) {
 
         // move to the correct line
         setLine(fp, runtime->line_num);
+
+        
     }
     
     // free memory, close files

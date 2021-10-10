@@ -23,4 +23,6 @@ Stack StackPush(Stack s, Value v);
 
 int StackLen(Stack s);
 
+void StackPrint(Stack s);
+
 #endif

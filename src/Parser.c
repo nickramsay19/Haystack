@@ -114,6 +114,10 @@ Command Parse(char **tokens, Runtime runtime) {
         return LOOP;
     } else if(strcmp(tokens[0], "jump") == 0) {
         return JUMP;
+    } else if(strcmp(tokens[0], "macro") == 0) {
+        return MACRO;
+    } else if(strcmp(tokens[0], "done") == 0) {
+        return DONE;
     } else {
         runtime->error_type = ERROR_SYNTAX;
         return NONE;
@@ -148,8 +152,6 @@ Command ParsePush(char **tokens, Runtime runtime) {
         
         j = atoi(tokens[0]);
     }
-
-    //printf("%d\n", j);
 
     // move value into payload
     runtime->payload[0] = j;

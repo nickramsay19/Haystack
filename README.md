@@ -106,10 +106,11 @@ print
             This means, that each loop can only have one **jump** statement associated with it.
 
 ## Backlog
-- [ ] Improve comment parsing.
+- [x] Improve comment parsing.
     - Allow comment only lines
     - Allow blank lines
 - [ ] Write README section on all examples.
+    - [ ] Finish factorial example
 - [ ] Add macro definitions
 - [ ] Add imports of macros
     - Add standard library of macros
@@ -118,7 +119,7 @@ print
 - [ ] Check for "maybe maybe"
     - Consider allowing it for "and"
 - [ ] Refactor file reading code, add new header, store code in memory
-- [ ] Consider adding max, min, sizes, end
+- [ ] Consider adding max, min, size, exit
 - [x] Division by zero error.
 - [x] Allow pushing of character literals e.g. "push 'a'".
 - [x] Char support.

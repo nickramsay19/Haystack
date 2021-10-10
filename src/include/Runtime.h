@@ -37,6 +37,8 @@ struct RuntimeRep {
     int loop_depth; // loop depth
     int *loop_reference;
 
+    bool macro;
+
     int line_num;
 
     bool executing;
